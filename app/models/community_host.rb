@@ -1,0 +1,2 @@
+class CommunityHost < ApplicationRecord
+end
