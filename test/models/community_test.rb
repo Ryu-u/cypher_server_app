@@ -9,7 +9,7 @@ class CommunityTest < ActiveSupport::TestCase
     hosting_user = User.new(name:'name:aaaa_host')
     hosting_user.save
 
-    hosted_community.hosts = hosting_user
+    hosted_community.hosts << hosting_user
     refute_nil hosted_community.hosts, 'failure of relation between community and host'
   end
 end
