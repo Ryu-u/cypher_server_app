@@ -4,4 +4,7 @@ class User < ApplicationRecord
 
   has_many :community_participants, foreign_key: 'participant_id'
   has_many :communities, through: :community_participants
+
+  has_many :community_followers, foreign_key: 'follower_id'
+  has_many :communities, through: :community_followers
 end
