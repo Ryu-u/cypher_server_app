@@ -4,4 +4,7 @@ class Community < ApplicationRecord
 
   has_many :community_participants
   has_many :participants, class_name: 'User', through: :community_participants
+
+  has_many :community_followers
+  has_many :followers, class_name: 'User', through: :community_followers
 end
