@@ -8,5 +8,5 @@ class User < ApplicationRecord
   has_many :community_followers, foreign_key: 'follower_id'
   has_many :communities, through: :community_followers
 
-  has_many :cyphers, classname: 'Cypher', foreign_key: 'host_id'
+  has_many :cyphers, class_name: 'Cypher', foreign_key: 'host_id'
 end
