@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170502113209) do
+ActiveRecord::Schema.define(version: 20170502115658) do
 
   create_table "communities", force: :cascade do |t|
     t.string   "name"
@@ -21,6 +21,13 @@ ActiveRecord::Schema.define(version: 20170502113209) do
     t.string   "thumbnail_url"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+  end
+
+  create_table "community_followers", force: :cascade do |t|
+    t.integer  "community_id"
+    t.integer  "follower_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "community_hosts", force: :cascade do |t|
