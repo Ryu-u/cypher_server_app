@@ -7,4 +7,6 @@ class Community < ApplicationRecord
 
   has_many :community_followers
   has_many :followers, class_name: 'User', through: :community_followers
+
+  has_many :cyphers
 end
