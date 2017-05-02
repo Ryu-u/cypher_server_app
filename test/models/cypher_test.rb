@@ -13,13 +13,13 @@ class CypherTest < ActiveSupport::TestCase
 
   test 'relation between cypher and host' do
     community = Community.create(name:'aaaa-community')
-    cypher = Cypher.create(name:'aaaa-cypher')
+    host = User.create(name:'aaaa-host')
+
+    cypher = Cypher.new(name:'aaaa-cypher')
 
     cypher.community = community
+    cypher.save
 
-    host = User.create(name:'aaaa-host')
-    community.hosts << host
-    cypher.host = host
-    refute_nil cypher.host, 'failure of relation between cypher and host'
+    refute_nil cypher, 'failure of relation between cypher and host'
   end
 end
