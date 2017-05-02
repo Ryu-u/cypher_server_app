@@ -1,0 +1,2 @@
+class CypherParticipant < ApplicationRecord
+end
