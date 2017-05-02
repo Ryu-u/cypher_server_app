@@ -7,6 +7,7 @@ class CypherTest < ActiveSupport::TestCase
 
     cypher.community = community
 
+    community.cyphers << cypher
     refute_nil community.cyphers, 'failure of relation between community and cyphers'
   end
 end
