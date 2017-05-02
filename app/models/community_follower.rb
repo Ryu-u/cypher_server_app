@@ -1,0 +1,2 @@
+class CommunityFollower < ApplicationRecord
+end
