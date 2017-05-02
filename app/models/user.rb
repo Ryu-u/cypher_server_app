@@ -9,4 +9,7 @@ class User < ApplicationRecord
   has_many :communities, through: :community_followers
 
   has_many :cyphers, class_name: 'Cypher', foreign_key: 'host_id'
+
+  has_many :cypher_participants, foreign_key: 'participant_id'
+  has_many :cyphers, through: :cypher_participants
 end
