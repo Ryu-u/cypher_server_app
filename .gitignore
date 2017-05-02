@@ -42,8 +42,4 @@ bower.json
 
 # Ignore Byebug command history file.
 .byebug_history
-# Intellij
-*.iml
-*.ipr
-*.iws
-.idea/
+
