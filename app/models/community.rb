@@ -1,4 +1,7 @@
 class Community < ApplicationRecord
   has_many :community_hosts
   has_many :hosts, class_name: 'User', through: :community_hosts
+
+  has_many :community_participants
+  has_many :participants, class_name: 'User', through: :community_participants
 end
