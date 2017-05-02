@@ -24,5 +24,17 @@ class CommunityTest < ActiveSupport::TestCase
     joined_community.participants << joining_user
     refute_nil joined_community.participants, 'failure of relation between community and participant'
   end
+
+  test 'relation between community and follower' do
+    followed_community = Community.new(name:'aaaa',
+                                     home:'豊中',
+                                     bio:'頑張ります')
+    followed_community.save
+    following_user = User.new(name:'name:aaaa_follower')
+    following_user.save
+
+    followed_community.followers << following_user
+    refute_nil followed_community.followers, 'failure of relation between community and follower'
+  end
   
 end
