@@ -10,7 +10,7 @@ class CommunityTest < ActiveSupport::TestCase
     hosting_user.save
 
     hosted_community.hosts << hosting_user
-    refute_nil hosted_community.hosts, 'failure of relation between community and host'
+    assert_not hosted_community.hosts.empty?, 'failure of relation between community and host'
   end
 
   test 'relation between community and participant' do
@@ -22,7 +22,7 @@ class CommunityTest < ActiveSupport::TestCase
     joining_user.save
 
     joined_community.participants << joining_user
-    refute_nil joined_community.participants, 'failure of relation between community and participant'
+    assert_not joined_community.participants.empty?, 'failure of relation between community and participant'
   end
 
   test 'relation between community and follower' do
@@ -34,7 +34,7 @@ class CommunityTest < ActiveSupport::TestCase
     following_user.save
 
     followed_community.followers << following_user
-    refute_nil followed_community.followers, 'failure of relation between community and follower'
+    assert_not followed_community.followers.empty?, 'failure of relation between community and follower'
   end
   
 end
