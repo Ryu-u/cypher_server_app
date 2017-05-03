@@ -8,7 +8,7 @@ class CypherTest < ActiveSupport::TestCase
     cypher.community = community
 
     community.cyphers << cypher
-    refute_nil community.cyphers, 'failure of relation between community and cyphers'
+    assert_not community.cyphers.empty?, 'failure of relation between community and cyphers'
   end
 
   test 'relation between cypher and host' do
@@ -20,7 +20,9 @@ class CypherTest < ActiveSupport::TestCase
    cypher.community = community
    cypher.save
 
-   refute_nil cypher, 'failure of relation between cypher and host'  end
+   cypher.host = host
+   assert cypher.host_id = host.id,  'failure of relation between cypher and host'
+  end
 
   test 'relation between cypher and participant' do
     community = Community.create(name:'aaaa-community')
