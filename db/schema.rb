@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170504162205) do
+ActiveRecord::Schema.define(version: 20170504164115) do
 
   create_table "communities", force: :cascade do |t|
     t.string   "name"
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 20170504162205) do
   end
 
   create_table "regular_cyphers", force: :cascade do |t|
-    t.string   "community_id"
+    t.integer  "community_id"
     t.text     "info"
     t.integer  "cypher_day"
     t.string   "cypher_from"
