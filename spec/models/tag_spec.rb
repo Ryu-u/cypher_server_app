@@ -25,6 +25,7 @@ describe Tag do
     it 'has many cyphers' do
       expect(@tag.cyphers.first).to eq @cypher
     end
+  end
 
 
 end
