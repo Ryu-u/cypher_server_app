@@ -12,4 +12,6 @@ class User < ApplicationRecord
 
   has_many :cypher_participants, foreign_key: 'participant_id'
   has_many :cyphers, through: :cypher_participants
+
+  has_many :posts
 end

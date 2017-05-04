@@ -4,4 +4,6 @@ class Cypher < ApplicationRecord
 
   has_many :cypher_participants
   has_many :participants, class_name: 'User', through: :cypher_participants
+
+  has_many :posts
 end
