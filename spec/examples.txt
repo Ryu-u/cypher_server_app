@@ -1,4 +1,6 @@
-example_id                                | status | run_time        |
------------------------------------------ | ------ | --------------- |
-./spec/models/post_spec.rb[1:1]           | passed | 0.09906 seconds |
-./spec/models/regular_cypher_spec.rb[1:1] | passed | 0.04303 seconds |
+example_id                                | status  | run_time        |
+----------------------------------------- | ------- | --------------- |
+./spec/models/community_tag_spec.rb[1:1]  | pending | 0 seconds       |
+./spec/models/post_spec.rb[1:1]           | passed  | 0.01852 seconds |
+./spec/models/regular_cypher_spec.rb[1:1] | passed  | 0.08458 seconds |
+./spec/models/tag_spec.rb[1:1:1]          | passed  | 0.10259 seconds |
