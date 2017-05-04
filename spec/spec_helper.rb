@@ -31,6 +31,8 @@ RSpec.configure do |config|
   # triggering implicit auto-inclusion in groups with matching metadata.
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
+  config.include FactoryGirl::Syntax::Methods
+
   config.before(:suite) do
     DatabaseCleaner.clean_with :truncation
     DatabaseCleaner.strategy = :transaction
