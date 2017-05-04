@@ -1,3 +1,4 @@
-example_id                      | status | run_time        |
-------------------------------- | ------ | --------------- |
-./spec/models/post_spec.rb[1:1] | passed | 0.13271 seconds |
+example_id                                | status | run_time        |
+----------------------------------------- | ------ | --------------- |
+./spec/models/post_spec.rb[1:1]           | passed | 0.09906 seconds |
+./spec/models/regular_cypher_spec.rb[1:1] | passed | 0.04303 seconds |
