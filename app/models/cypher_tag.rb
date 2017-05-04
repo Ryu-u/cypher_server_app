@@ -1,0 +1,2 @@
+class CypherTag < ApplicationRecord
+end
