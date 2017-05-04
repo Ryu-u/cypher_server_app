@@ -1,0 +1,2 @@
+class RegularCypher < ApplicationRecord
+end
