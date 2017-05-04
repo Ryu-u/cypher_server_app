@@ -1,5 +1,25 @@
 require 'rails_helper'
 
-RSpec.describe Post, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+describe Post do
+  it "belongs to cypher and user" do
+    community = create(:community)
+    user = create(:user)
+
+    cypher = build(:cypher)
+
+    cypher.community = community
+    cypher.host = user
+
+    cypher.save
+
+    post = build(:post)
+
+    post.cypher = cypher
+    post.user = user
+
+    post.save
+
+    expect(post.cypher_id).to eq cypher.id
+    expect(post.user_id).to eq user.id
+  end
 end
