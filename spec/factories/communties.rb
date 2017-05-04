@@ -1,4 +1,4 @@
-actoryGirl.define do
+FactoryGirl.define do
   factory :community do
     name "aaaa"
     home "豊中"
