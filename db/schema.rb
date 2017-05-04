@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170502184414) do
+ActiveRecord::Schema.define(version: 20170504083522) do
 
   create_table "communities", force: :cascade do |t|
     t.string   "name"
@@ -63,6 +63,15 @@ ActiveRecord::Schema.define(version: 20170502184414) do
     t.integer  "capacity"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "posts", force: :cascade do |t|
+    t.text     "content"
+    t.integer  "user_id"
+    t.integer  "cypher_id"
+    t.string   "directory_url"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "users", force: :cascade do |t|
