@@ -1,7 +1,7 @@
 class CreateRegularCyphers < ActiveRecord::Migration[5.0]
   def change
     create_table :regular_cyphers do |t|
-      t.string :community_id
+      t.integer :community_id
       t.text :info
       t.integer :cypher_day
       t.string :cypher_from
