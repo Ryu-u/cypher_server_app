@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(version: 20170504194346) do
   end
 
   create_table "community_hosts", force: :cascade do |t|
-    t.integer  "community_id"
-    t.integer  "host_id"
+    t.integer  "community_id", null: false
+    t.integer  "host_id",      null: false
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
