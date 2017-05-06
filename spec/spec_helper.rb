@@ -97,3 +97,17 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 
 end
+
+RSpec::Matchers.define :have_not_null_constraint_on do |field|
+  match do |model|
+    model.send("#{field}=", nil)
+    begin
+      model.save!(validate: false)
+      false
+    rescue ActiveRecord::StatementInvalid
+      true
+    end
+    description { "have NOT NULL constraint on #{field}" }
+    failure_message { "expected to have NOT NULL constraint on #{field}, but not" }
+  end
+end
