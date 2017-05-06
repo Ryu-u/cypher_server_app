@@ -11,4 +11,7 @@ class Community < ApplicationRecord
   has_many :cyphers
 
   has_one :regular_cypher
+
+  has_many :community_tags
+  has_many :tags, through: :community_tags
 end
