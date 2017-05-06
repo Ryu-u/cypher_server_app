@@ -106,10 +106,10 @@ ActiveRecord::Schema.define(version: 20170504194346) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "name"
-    t.string   "home"
-    t.text     "bio"
-    t.integer  "type_flag"
+    t.string   "name",             null: false
+    t.string   "home",             null: false
+    t.text     "bio",              null: false
+    t.integer  "type_flag",        null: false
     t.string   "twitter_account"
     t.string   "facebook_account"
     t.string   "thumbnail_url"
