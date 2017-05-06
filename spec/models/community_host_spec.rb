@@ -1,17 +1,8 @@
 require 'rails_helper'
 
 describe CommunityHost do
-  before do
-    @community = create(:community)
-    @host = create(:user)
-    @community.hosts << @host
-  end
 
-  it 'community_id column should not be null' do
-    expect{@community.community_hosts.update(community_id: nil)}.to raise_error
-  end
+  it {have_not_null_constraint_on(:community_id)}
+  it {have_not_null_constraint_on(:host_id)}
 
-  it 'host_id column should not be null' do
-    expect{@community.community_hosts.update(host_id: nil)}.to raise_error
-  end
 end
