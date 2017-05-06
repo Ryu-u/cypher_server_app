@@ -13,9 +13,9 @@
 ActiveRecord::Schema.define(version: 20170504164115) do
 
   create_table "communities", force: :cascade do |t|
-    t.string   "name"
-    t.string   "home"
-    t.text     "bio"
+    t.string   "name",             null: false
+    t.string   "home",             null: false
+    t.text     "bio",              null: false
     t.string   "twitter_account"
     t.string   "facebook_account"
     t.string   "thumbnail_url"
