@@ -38,8 +38,8 @@ ActiveRecord::Schema.define(version: 20170504194346) do
   end
 
   create_table "community_participants", force: :cascade do |t|
-    t.integer  "community_id"
-    t.integer  "participant_id"
+    t.integer  "community_id",   null: false
+    t.integer  "participant_id", null: false
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
   end
