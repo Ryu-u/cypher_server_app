@@ -16,14 +16,20 @@ describe Tag do
     @tag.save
   end
 
-  describe 'on community' do
-    it 'has many communities' do
-      expect(@tag.communities.first).to eq @community
-    end
+  context 'not null constraint' do
+    it {have_not_null_constraint_on(:content)}
   end
-  describe 'on cypher' do
-    it 'has many cyphers' do
-      expect(@tag.cyphers.first).to eq @cypher
+
+  context 'association' do
+    describe 'on community' do
+      it 'has many communities' do
+        expect(@tag.communities.first).to eq @community
+      end
+    end
+    describe 'on cypher' do
+      it 'has many cyphers' do
+        expect(@tag.cyphers.first).to eq @cypher
+      end
     end
   end
 
