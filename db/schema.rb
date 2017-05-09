@@ -89,12 +89,12 @@ ActiveRecord::Schema.define(version: 20170504194346) do
   end
 
   create_table "regular_cyphers", force: :cascade do |t|
-    t.integer  "community_id"
-    t.text     "info"
-    t.integer  "cypher_day"
-    t.string   "cypher_from"
-    t.string   "cypher_to"
-    t.string   "place"
+    t.integer  "community_id", null: false
+    t.text     "info",         null: false
+    t.integer  "cypher_day",   null: false
+    t.string   "cypher_from",  null: false
+    t.string   "cypher_to",    null: false
+    t.string   "place",        null: false
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
