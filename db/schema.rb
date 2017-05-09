@@ -66,14 +66,14 @@ ActiveRecord::Schema.define(version: 20170504194346) do
   end
 
   create_table "cyphers", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "serial_num"
-    t.integer  "community_id"
-    t.text     "info"
-    t.datetime "cypher_from"
-    t.datetime "cypher_to"
-    t.string   "place"
-    t.integer  "host_id"
+    t.string   "name",         null: false
+    t.integer  "serial_num",   null: false
+    t.integer  "community_id", null: false
+    t.text     "info",         null: false
+    t.datetime "cypher_from",  null: false
+    t.datetime "cypher_to",    null: false
+    t.string   "place",        null: false
+    t.integer  "host_id",      null: false
     t.integer  "capacity"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
