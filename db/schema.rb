@@ -59,8 +59,8 @@ ActiveRecord::Schema.define(version: 20170504194346) do
   end
 
   create_table "cypher_tags", force: :cascade do |t|
-    t.integer  "cypher_id"
-    t.integer  "tag_id"
+    t.integer  "cypher_id",  null: false
+    t.integer  "tag_id",     null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
