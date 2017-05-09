@@ -6,7 +6,7 @@ describe Post do
     it {have_not_null_constraint_on(:cypher_id)}
   end
 
-  content 'association' do
+  context 'association' do
     it "belongs to cypher and user" do
       community = create(:community)
       user = create(:user)
