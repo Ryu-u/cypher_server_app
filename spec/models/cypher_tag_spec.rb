@@ -1,5 +1,6 @@
 require 'rails_helper'
 
-#RSpec.describe CypherTag, type: :model do
-#  pending "add some examples to (or delete) #{__FILE__}"
-#end
+describe CypherTag do
+  it {have_not_null_constraint_on(:cypher_id)}
+  it {have_not_null_constraint_on(:tag_id)}
+end
