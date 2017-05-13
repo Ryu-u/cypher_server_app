@@ -14,4 +14,8 @@ class Community < ApplicationRecord
 
   has_many :community_tags
   has_many :tags, through: :community_tags
+
+  validates :name, presence: true, uniqueness: true
+  validates :home, presence: true
+  validates :bio, presence: true
 end
