@@ -1,19 +1,24 @@
 require 'rails_helper'
 
 describe Community do
-  before do
-    @community = create(:community)
+  describe 'with DB constraint' do
+    before do
+      @community = create(:community)
+    end
+
+    it {have_not_null_constraint_on(:name)}
+
+    it {have_not_null_constraint_on(:home)}
+
+    it {have_not_null_constraint_on(:bio)}
   end
 
-  it 'name column should not be null' do
-    expect{@community.update(name: nil)}.to raise_error
-  end
+  describe 'with validation' do
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validates_uniqueness_of(:name)}
 
-  it 'home column should not be null' do
-    expect{@community.update(home: nil)}.to raise_error
-  end
+    it { is_expected.to validate_presence_of(:home) }
 
-  it 'bio column should not be null' do
-    expect{@community.update(bio: nil)}.to raise_error
+    it { is_expected.to validate_presence_of(:bio) }
   end
 end
