@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 20170504194346) do
     t.integer  "participant_id", null: false
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.index ["community_id", "participant_id"], name: "communityparticipants_unique_index", unique: true
   end
 
   create_table "community_tags", force: :cascade do |t|
