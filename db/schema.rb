@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 20170504194346) do
     t.integer  "follower_id",  null: false
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.index ["community_id", "follower_id"], name: "communityfollowers_unique_index", unique: true
   end
 
   create_table "community_hosts", force: :cascade do |t|
