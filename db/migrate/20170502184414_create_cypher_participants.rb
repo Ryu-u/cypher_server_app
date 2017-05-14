@@ -6,5 +6,7 @@ class CreateCypherParticipants < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_index :cypher_participants, [:cypher_id, :participant_id], unique: true, name: 'cypherparticipants_unique_index'
   end
 end
