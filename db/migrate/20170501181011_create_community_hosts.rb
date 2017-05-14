@@ -6,5 +6,7 @@ class CreateCommunityHosts < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_index :communities, [:community_id, :host_id], unique: true, name: 'communityhosts_unique_index'
   end
 end
