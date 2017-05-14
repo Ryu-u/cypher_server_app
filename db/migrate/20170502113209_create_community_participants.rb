@@ -6,5 +6,7 @@ class CreateCommunityParticipants < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_index :community_participants, [:community_id, :participant_id], unique: true, name: 'communityparticipants_unique_index'
   end
 end
