@@ -28,7 +28,7 @@ describe Post do
           post.user = poster
           post.save
 
-          another_post = post.new(cypher_id: cypher.id, user_id: user.id)
+          another_post = Post.new(cypher_id: cypher.id, user_id: poster.id)
           another_post.save!(validate: false)
         end.to raise_error(ActiveRecord::RecordNotUnique)
       end
