@@ -9,4 +9,13 @@ class Cypher < ApplicationRecord
 
   has_many :cypher_tags
   has_many :tags, through: :cypher_tags
+
+  validates :name, presence: true
+  validates :serial_num, presence: true
+  validates :community_id, presence: true
+  validates :info, presence: true
+  validates :cypher_from, presence: true
+  validates :cypher_to, presence: true
+  validates :place, presence: true
+  validates :host_id, presence: true
 end
