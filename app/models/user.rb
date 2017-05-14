@@ -14,4 +14,9 @@ class User < ApplicationRecord
   has_many :cyphers, through: :cypher_participants
 
   has_many :posts
+
+  validates :name, presence: true
+  validates :home, presence: true
+  validates :bio, presence: true
+  validates :type_flag, presence: true
 end
