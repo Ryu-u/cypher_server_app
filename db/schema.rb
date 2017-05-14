@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20170504194346) do
     t.integer  "participant_id", null: false
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.index ["cypher_id", "participant_id"], name: "cypherparticipants_unique_index", unique: true
   end
 
   create_table "cypher_tags", force: :cascade do |t|
