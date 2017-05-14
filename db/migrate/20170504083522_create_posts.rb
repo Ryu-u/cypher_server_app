@@ -8,5 +8,7 @@ class CreatePosts < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_index :posts, [:cypher_id, :user_id], unique: true, name: 'posts_unique_index'
   end
 end
