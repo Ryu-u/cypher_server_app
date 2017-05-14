@@ -18,8 +18,8 @@ describe CypherParticipant do
                               cypher_from:DateTime.now(),
                               cypher_to:DateTime.now(),
                               place:"aaaa")
-          community.cyphers << cypher
-          host.cyphers << cypher
+          cypher.community = community
+          cypher.host = host
           cypher.save
 
           participant = User.create(name: "bbbb", home: "bbbb", bio: "bbbb", type_flag:1)
