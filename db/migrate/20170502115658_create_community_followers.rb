@@ -6,5 +6,7 @@ class CreateCommunityFollowers < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_index :community_followers, [:community_id, :follower_id], unique: true, name: 'communityfollowers_unique_index'
   end
 end
