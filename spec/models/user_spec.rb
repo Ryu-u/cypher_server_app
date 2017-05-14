@@ -1,24 +1,17 @@
 require 'rails_helper'
 
 describe User do
-  before do
-    @user = create(:user)
+  describe 'with DB' do
+    it { have_not_null_constraint_on(:name) }
+    it { have_not_null_constraint_on(:home) }
+    it { have_not_null_constraint_on(:bio) }
+    it { have_not_null_constraint_on(:type_flag) }
   end
 
-  it 'name column should be not null' do
-    expect{@user.update(name: nil)}.to raise_error
+  describe 'with validation' do
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:home) }
+    it { is_expected.to validate_presence_of(:bio) }
+    it { is_expected.to validate_presence_of(:type_flag) }
   end
-
-  it 'home column should be not null' do
-    expect{@user.home(home: nil)}.to raise_error
-  end
-
-  it 'bio column should be not null' do
-    expect{@user.home(bio: nil)}.to raise_error
-  end
-
-  it 'type_flag column should be not null' do
-    expect{@user.home(type_flag: nil)}.to raise_error
-  end
-
 end
