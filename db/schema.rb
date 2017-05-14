@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20170504194346) do
     t.integer  "host_id",      null: false
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.index ["community_id", "host_id"], name: "communityhosts_unique_index", unique: true
   end
 
   create_table "community_participants", force: :cascade do |t|
