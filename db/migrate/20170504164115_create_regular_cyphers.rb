@@ -10,5 +10,7 @@ class CreateRegularCyphers < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_index :regular_cyphers, :community_id, unique: true, name: "regularcyphers_unique_index"
   end
 end
