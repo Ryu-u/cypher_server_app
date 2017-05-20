@@ -27,9 +27,9 @@ describe User do
       it { is_expected.to have_many(:participating_communities).through(:community_participants) }
       it { is_expected.to have_many(:community_followers) }
       it { is_expected.to have_many(:following_communities).through(:community_followers) }
-      it { is_expected.to have_many(:cyphers)}
+      it { is_expected.to have_many(:hosting_cyphers)}
       it { is_expected.to have_many(:cypher_participants) }
-      it { is_expected.to have_many(:cyphers).through(:cypher_participants) }
+      it { is_expected.to have_many(:participating_cyphers).through(:cypher_participants) }
       it { is_expected.to have_many(:posts)}
     end
   end
