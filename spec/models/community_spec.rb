@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 describe Community do
-  describe 'with DB constraint' do
-    it {have_not_null_constraint_on(:name)}
-    it {have_not_null_constraint_on(:home)}
-    it {have_not_null_constraint_on(:bio)}
+  describe 'with DB' do
+    context 'not null constraint' do
+      it {have_not_null_constraint_on(:name)}
+      it {have_not_null_constraint_on(:home)}
+      it {have_not_null_constraint_on(:bio)}
+    end
 
-    describe 'of uniqueness' do
+    context 'of uniqueness' do
       it 'should not have the same value in different records of name column ' do
         expect do
           existing_community = Community.create(name:"AAAA", home:"AAAA", bio:"AAAA")
@@ -18,14 +20,31 @@ describe Community do
     end
   end
 
-  describe 'with validation' do
-    it { is_expected.to validate_presence_of(:name) }
-    it { is_expected.to validate_presence_of(:home) }
-    it { is_expected.to validate_presence_of(:bio) }
+  describe 'with model' do
+    context 'validation' do
+      describe 'of presence' do
+        it { is_expected.to validate_presence_of(:name) }
+        it { is_expected.to validate_presence_of(:home) }
+        it { is_expected.to validate_presence_of(:bio) }
+      end
 
-    describe 'of uniqueness' do
-      subject{build(:community)}
-      it { is_expected.to validate_uniqueness_of(:name) }
+      describe 'of uniqueness' do
+        subject{build(:community)}
+        it { is_expected.to validate_uniqueness_of(:name) }
+      end
+    end
+
+    context 'association' do
+      it {is_expected.to have_many(:community_hosts)}
+      it {is_expected.to have_many(:hosts).through(:community_hosts)}
+      it {is_expected.to have_many(:community_participants)}
+      it {is_expected.to have_many(:participants).through(:community_participants)}
+      it {is_expected.to have_many(:community_followers)}
+      it {is_expected.to have_many(:followers).through(:community_followers)}
+      it {is_expected.to have_many(:cyphers)}
+      it {is_expected.to have_one(:regular_cypher)}
+      it {is_expected.to have_many(:community_tags)}
+      it {is_expected.to have_many(:tags).through(:community_tags)}
     end
   end
 end
