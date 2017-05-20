@@ -6,5 +6,7 @@ class CreateCommunityTags < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_index :community_tags, [:community_id, :tag_id], unique: true, name: 'communitytags_unique_index'
   end
 end
