@@ -5,5 +5,7 @@ class CreateTags < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_index :tags, :content, name: 'tags_unique_index'
   end
 end
