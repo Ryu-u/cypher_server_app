@@ -14,10 +14,10 @@ class User < ApplicationRecord
             class_name: 'Community',
             through: :community_followers
 
-  has_many :cyphers, class_name: 'Cypher', foreign_key: 'host_id'
+  has_many :hosting_cyphers, class_name: 'Cypher', foreign_key: 'host_id'
 
   has_many :cypher_participants, foreign_key: 'participant_id'
-  has_many :cyphers, through: :cypher_participants
+  has_many :participating_cyphers, class_name: 'User', through: :cypher_participants
 
   has_many :posts
 
