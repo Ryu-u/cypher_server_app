@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 20170504194346) do
     t.string   "content",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["content"], name: "tags_unique_index"
   end
 
   create_table "users", force: :cascade do |t|
