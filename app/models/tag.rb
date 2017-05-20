@@ -4,4 +4,6 @@ class Tag < ApplicationRecord
 
   has_many :cypher_tags
   has_many :cyphers, through: :cypher_tags
+
+  validates :content, presence: true, uniqueness: true
 end
