@@ -2,7 +2,7 @@ class Post < ApplicationRecord
   belongs_to :user
   belongs_to :cypher
 
-  validates :cypher_id, presence: true, uniqueness: { scope: :user_id }
+  validates :cypher_id, presence: true
   validates :user_id, presence: true
 
 end
