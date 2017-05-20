@@ -93,7 +93,6 @@ ActiveRecord::Schema.define(version: 20170504194346) do
     t.string   "directory_url"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.index ["cypher_id", "user_id"], name: "posts_unique_index", unique: true
   end
 
   create_table "regular_cyphers", force: :cascade do |t|
