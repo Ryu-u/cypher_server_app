@@ -2,10 +2,12 @@ require 'rails_helper'
 
 describe CommunityHost do
   describe 'with DB' do
-    it {have_not_null_constraint_on(:community_id)}
-    it {have_not_null_constraint_on(:host_id)}
+    context 'not null constraint' do
+      it {have_not_null_constraint_on(:community_id)}
+      it {have_not_null_constraint_on(:host_id)}
+    end
 
-    describe 'of index' do
+    context 'of index' do
       it 'should not have two records whith have the same combination of community_id and host id' do
         expect do
           community = Community.create(name: "aaaa", home: "aaaa", bio: "aaaa")
@@ -19,13 +21,20 @@ describe CommunityHost do
     end
   end
 
-  describe 'with validation' do
-    it { is_expected.to validate_presence_of(:community_id) }
-    it { is_expected.to validate_presence_of(:host_id) }
+  describe 'with model' do
+    context 'of presence' do
+      it { is_expected.to validate_presence_of(:community_id) }
+      it { is_expected.to validate_presence_of(:host_id) }
+    end
 
-    describe 'of uniqueness' do
+    context 'of uniqueness' do
       subject{CommunityHost.new(community_id:1, host_id:1)}
       it { is_expected.to validate_uniqueness_of(:community_id).scoped_to(:host_id) }
+    end
+
+    context 'association' do
+      it {is_expected.to belong_to(:community)}
+      it {is_expected.to belong_to(:host)}
     end
   end
 end
