@@ -31,7 +31,7 @@ describe CommunityTag do
       end
 
       describe 'uniqueness' do
-        subject{build(:community_tag)}
+        subject{CommunityTag.new(community_id: 1, tag_id: 1)}
         it{is_expected.to validate_uniqueness_of(:community_id).scoped_to(:tag_id)}
       end
     end
