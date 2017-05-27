@@ -13,7 +13,7 @@ json.community do
       json.partial! 'v1/_tag'
     end
   end
-  
+
   json.hosts do
     json.array! @community.hosts.all do |host|
       json.partial! 'v1/_user', user: host
