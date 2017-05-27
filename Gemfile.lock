@@ -41,6 +41,10 @@ GEM
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
     arel (7.1.4)
+    axiom-types (0.1.1)
+      descendants_tracker (~> 0.0.4)
+      ice_nine (~> 0.11.0)
+      thread_safe (~> 0.3, >= 0.3.1)
     bindex (0.5.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
@@ -56,6 +60,8 @@ GEM
     childprocess (0.6.3)
       ffi (~> 1.0, >= 1.0.11)
     coderay (1.1.1)
+    coercible (1.0.0)
+      descendants_tracker (~> 0.0.1)
     coffee-rails (4.2.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.2.x)
@@ -66,7 +72,10 @@ GEM
     concurrent-ruby (1.0.5)
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
+    descendants_tracker (0.0.4)
+      thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.3)
+    equalizer (0.0.11)
     erubis (2.7.0)
     execjs (2.7.0)
     factory_girl (4.8.0)
@@ -82,9 +91,27 @@ GEM
       railties (>= 3.2, < 5.2)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
+    grape (0.19.2)
+      activesupport
+      builder
+      hashie (>= 2.1.0)
+      multi_json (>= 1.3.2)
+      multi_xml (>= 0.5.2)
+      mustermann-grape (~> 1.0.0)
+      rack (>= 1.3.0)
+      rack-accept
+      virtus (>= 1.0.0)
+    grape-jbuilder (0.2.0)
+      grape (>= 0.3)
+      i18n
+      jbuilder
+      tilt
+      tilt-jbuilder (>= 0.4.0)
     haml (4.0.7)
       tilt
+    hashie (3.5.5)
     i18n (0.8.1)
+    ice_nine (0.11.2)
     jbuilder (2.6.3)
       activesupport (>= 3.0.0, < 5.2)
       multi_json (~> 1.2)
@@ -94,6 +121,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (5.0.5)
       railties (>= 3.2.16)
+    json_expressions (0.9.0)
     kaminari (0.17.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -110,6 +138,10 @@ GEM
     mini_portile2 (2.1.0)
     minitest (5.10.1)
     multi_json (1.12.1)
+    multi_xml (0.6.0)
+    mustermann (1.0.0)
+    mustermann-grape (1.0.0)
+      mustermann (~> 1.0.0)
     nested_form (0.3.2)
     nio4r (2.0.0)
     nokogiri (1.7.1-x64-mingw32)
@@ -132,6 +164,8 @@ GEM
     public_suffix (2.0.5)
     puma (3.8.2)
     rack (2.0.1)
+    rack-accept (0.4.5)
+      rack (>= 0.4)
     rack-pjax (1.0.0)
       nokogiri (~> 1.5)
       rack (>= 1.1)
@@ -218,6 +252,9 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.7)
+    tilt-jbuilder (0.7.1)
+      jbuilder
+      tilt (>= 1.3.0, < 3)
     tod (2.1.1)
     turbolinks (5.0.1)
       turbolinks-source (~> 5)
@@ -228,6 +265,11 @@ GEM
       tzinfo (>= 1.0.0)
     uglifier (3.2.0)
       execjs (>= 0.3.0, < 3)
+    virtus (1.0.5)
+      axiom-types (~> 0.1)
+      coercible (~> 1.0)
+      descendants_tracker (~> 0.0, >= 0.0.3)
+      equalizer (~> 0.0, >= 0.0.9)
     web-console (3.5.0)
       actionview (>= 5.0)
       activemodel (>= 5.0)
@@ -252,8 +294,11 @@ DEPENDENCIES
   factory_girl_rails
   faker
   flag_shih_tzu
+  grape
+  grape-jbuilder
   jbuilder (~> 2.5)
   jquery-rails
+  json_expressions
   launchy
   pry-byebug
   pry-doc

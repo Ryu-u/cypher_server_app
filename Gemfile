@@ -39,6 +39,9 @@ gem 'tod'
 gem 'flag_shih_tzu'
 gem 'rails_admin'
 
+gem 'grape'
+gem 'grape-jbuilder'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
@@ -52,6 +55,7 @@ group :test do
   gem 'launchy'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
+  gem 'json_expressions'
 end
 
 group :development do
