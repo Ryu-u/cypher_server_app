@@ -8,6 +8,12 @@ json.community do
   json.facebook_account @community.facebook_account
   json.thumbnail_url    @community.thumbnail_url
 
+  json.tags do
+    json.array! @community.tags.all do |tag|
+      json.partial! 'v1/_tag'
+    end
+  end
+  
   json.hosts do
     json.array! @community.hosts.all do |host|
       json.partial! 'v1/_user', user: host
