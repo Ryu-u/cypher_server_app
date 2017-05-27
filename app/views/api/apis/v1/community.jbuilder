@@ -10,7 +10,7 @@ json.community do
 
   json.tags do
     json.array! @community.tags.all do |tag|
-      json.partial! 'v1/_tag'
+      json.partial! 'v1/_tag', tag: tag
     end
   end
 
@@ -27,11 +27,10 @@ json.community do
   end
 
   json.regular_cypher do
-    json.info           @community.regular_cypher.info
-    json.cypher_day     @community.regular_cypher.cypher_day
-    json.cypher_from    @community.regular_cypher.cypher_from
-    json.cypher_to      @community.regular_cypher.cypher_to
-    json.place          @community.regular_cypher.place
+    json.place               @community.regular_cypher.place
+    json.cypher_day          @community.regular_cypher.cypher_day
+    json.cypher_from         @community.regular_cypher.cypher_from
+    json.cypher_to           @community.regular_cypher.cypher_to
   end
 
   json.past_cyphers do
