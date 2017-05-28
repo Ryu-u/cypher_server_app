@@ -1,5 +1,7 @@
+require 'Faker'
 FactoryGirl.define do
   factory :tag do
-    content "MyString"
+
+    content {Faker::Zelda.unique.character}
   end
 end
