@@ -1,11 +1,13 @@
+require 'Faker'
 FactoryGirl.define do
-  factory :user do
-    name "aaaa"
-    home "豊中"
-    bio "頑張ります"
+  factory :user, aliases:[:host, :participant, :follower] do
+    name {Faker::Name.first_name}
+    home {Faker::Address.city}
+    bio {Faker::ChuckNorris.fact}
     type_flag 1
-    twitter_account "aaaa_twitter"
-    facebook_account "facebook_account"
-    thumbnail_url "aaaa"
+    twitter_account {"#{name}_tw".downcase}
+    facebook_account {"#{name}_fb".downcase}
+    thumbnail_url {Faker::File.file_name('path/to/',
+                                        "#{name}", 'jpg')}
   end
 end
