@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :community_participant do
     participant
-    community
+    participating_community
   end
 end

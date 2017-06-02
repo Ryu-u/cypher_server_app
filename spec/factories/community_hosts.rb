@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :community_host do
     host
-    community
+    hosting_community
   end
 end

@@ -1,8 +1,8 @@
 require 'Faker'
 FactoryGirl.define do
-  factory :community, aliases:[:hosting_communities,
-                              :participating_communities,
-                              :following_communities] do
+  factory :community, aliases:[:hosting_community,
+                              :participating_community,
+                              :following_community] do
 
     name {Faker::Team.name}
     home {Faker::Address.city}
@@ -15,7 +15,7 @@ FactoryGirl.define do
     trait :with_host do
       after(:create) do |community|
         create(:community_host,
-               community: community,
+               hosting_community: community,
                host: create(:host))
       end
     end
@@ -24,7 +24,7 @@ FactoryGirl.define do
       after(:create) do |community|
         3.times do
           create(:community_participant,
-                 community: community,
+                 participating_community: community,
                  participant: create(:participant))
         end
       end
@@ -34,7 +34,7 @@ FactoryGirl.define do
       after(:create) do |community|
         3.times do
           create(:community_follower,
-                 community: community,
+                 following_community: community,
                  follower: create(:follower))
         end
       end

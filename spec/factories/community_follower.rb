@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :community_follower do
     follower
-    community
+    following_community
   end
 end
