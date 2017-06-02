@@ -33,7 +33,7 @@ describe CommunityHost do
     end
 
     context 'association' do
-      it {is_expected.to belong_to(:community)}
+      it {is_expected.to belong_to(:hosting_community)}
       it {is_expected.to belong_to(:host)}
     end
   end

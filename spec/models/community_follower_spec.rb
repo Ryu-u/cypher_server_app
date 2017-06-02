@@ -33,7 +33,7 @@ describe CommunityFollower do
     end
 
     context 'association' do
-      it {is_expected.to belong_to(:community)}
+      it {is_expected.to belong_to(:following_community)}
       it {is_expected.to belong_to(:follower)}
     end
   end

@@ -33,7 +33,7 @@ describe CommunityParticipant do
     end
 
     context 'association' do
-      it {is_expected.to belong_to(:community)}
+      it {is_expected.to belong_to(:participating_community)}
       it {is_expected.to belong_to(:participant)}
     end
   end

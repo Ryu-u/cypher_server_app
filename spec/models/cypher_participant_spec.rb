@@ -53,7 +53,7 @@ describe CypherParticipant do
     end
 
     context 'association' do
-      it{is_expected.to belong_to(:cypher)}
+      it{is_expected.to belong_to(:participating_cypher)}
       it{is_expected.to belong_to(:participant)}
     end
   end
