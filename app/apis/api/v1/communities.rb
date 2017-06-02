@@ -14,6 +14,12 @@ module API
         end
         get '/:id', jbuilder: 'v1/community' do
           @community = Community.find(params[:id])
+          @past_cyphers = @community.cyphers.
+                                      where('cypher_from < ?', Date.today.to_datetime).
+                                      order(cypher_from: :desc).all
+          @future_cyphers = @community.cyphers.
+                                      where('cypher_from >= ?', Date.today.to_datetime).
+                                      order(:cypher_from).all
         end
 
 
