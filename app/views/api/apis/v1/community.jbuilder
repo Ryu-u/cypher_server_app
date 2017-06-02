@@ -9,9 +9,13 @@ json.community do
   json.thumbnail_url    @community.thumbnail_url
 
   json.tags do
-    json.array! @community.tags.all do |tag|
-      json.partial! 'v1/_tag', tag: tag
-    end
+   if @community.tags.nil?
+     json.null!
+   else
+     json.array! @community.tags.all do |tag|
+       json.partial! 'v1/_tag', tag: tag
+     end
+   end
   end
 
   json.hosts do
@@ -21,31 +25,43 @@ json.community do
   end
 
   json.members do
-    json.array! @community.participants.all do |participant|
-      json.partial! 'v1/_user', user: participant
+    if @community.participants.nil?
+      json.null!
+    else
+      json.array! @community.participants.all do |participant|
+        json.partial! 'v1/_user', user: participant
+      end
     end
   end
 
   json.regular_cypher do
-    json.place               @community.regular_cypher.place
-    json.cypher_day          @community.regular_cypher.cypher_day
-    json.cypher_from         @community.regular_cypher.cypher_from
-    json.cypher_to           @community.regular_cypher.cypher_to
-  end
-
-  json.past_cyphers do
-    json.array! @community.cyphers.
-                            where('cypher_from < ?', Date.today.to_datetime).
-                              order(cypher_from: :desc).all do |cypher|
-      json.partial! 'v1/_cypher_summary', cypher: cypher
+    if @community.regular_cypher.nil?
+      json.null!
+    else
+      json.place               @community.regular_cypher.place
+      json.cypher_day          @community.regular_cypher.cypher_day
+      json.cypher_from         @community.regular_cypher.cypher_from
+      json.cypher_to           @community.regular_cypher.cypher_to
     end
   end
 
-  json.future_cyphers do
-    json.array! @community.cyphers.
-                            where('cypher_from >= ?', Date.today.to_datetime).
-                              order(:cypher_from).all  do |cypher|
-      json.partial! 'v1/_cypher_summary', cypher: cypher
+  if @past_cyphers.nil?
+    json.null!
+  else
+    json.past_cyphers do
+      json.array! @past_cyphers do |cypher|
+        json.partial! 'v1/_cypher_summary', cypher: cypher
+      end
+    end
+  end
+
+  if @future_cyphers.nil?
+    json.null!
+  else
+    json.future_cyphers do
+      json.array! @future_cyphers do |cypher|
+        json.partial! 'v1/_cypher_summary', cypher: cypher
+      end
     end
   end
 end
