@@ -24,12 +24,33 @@ module API
 
 
         get '/my_communities/:id', jbuilder: 'v1/community_summary' do
-          @communities = CommunityParticipant.
-                          where(participant_id: params[:id]).
-                          order(created_at: :desc).
-                          limit(params[:limit]).
-                          offset(params[:since_id]).
-                          Communities.all
+          @communities = User.find(params[:id]).
+                              participating_communities.
+                              joins(:community_participants).
+                              includes(:community_participants).
+                              order("community_participants.created_at DESC").
+                              page(params[:since_id]).
+                              per(params[:limit])
+        end
+
+        get '/hosting_communities/:id', jbuilder: 'v1/community_summary' do
+          @communities = User.find(params[:id]).
+                              hosting_communities.
+                              joins(:community_hosts).
+                              includes(:community_hosts).
+                              order("community_hosts.created_at DESC").
+                              page(params[:since_id]).
+                              per(params[:limit])
+        end
+
+        get '/following_communities/:id', jbuilder: 'v1/community_summary' do
+          @communities = User.find(params[:id]).
+                              following_communities.
+                              joins(:community_followers).
+                              includes(:community_followers).
+                              order("community_followers.created_at DESC").
+                              page(params[:since_id]).
+                              per(params[:limit])
         end
       end
 
