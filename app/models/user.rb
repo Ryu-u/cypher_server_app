@@ -21,6 +21,8 @@ class User < ApplicationRecord
 
   has_many :posts
 
+  has_one :api_key
+
   validates :name, presence: true
   validates :home, presence: true
   validates :bio, presence: true
