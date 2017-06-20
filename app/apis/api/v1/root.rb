@@ -4,6 +4,27 @@ module API
       version 'v1', using: :path
       format :json
 
+      helpers do
+        def authenticate!
+          if !current_user
+            # TODO: errorじゃなくて再認証させたい
+            error!('Unauthorized. Invalid or expired token.', 401)
+          else
+            true
+          end
+
+        end
+
+        def current_user
+          token = ApiKey.where(access_token: params[:token]).first
+          if token && !token.expired?
+            @current_user = User.find(token.user_id)
+          else
+            false
+          end
+        end
+      end
+
       rescue_from ActiveRecord::RecordNotFound do |e|
         error!({ error: 'Not Found', detail: "#{e.message}" }, 404)
       end
