@@ -7,16 +7,14 @@ module API
       helpers do
         def authenticate!
           if !current_user
-            # TODO: errorじゃなくて再認証させたい
             error!('Unauthorized. Invalid or expired token.', 401)
           else
             true
           end
-
         end
 
         def current_user
-          token = ApiKey.where(access_token: params[:token]).first
+          token = ApiKey.where(access_token: request.headers['Access-Token']).last
           if token && !token.expired?
             @current_user = User.find(token.user_id)
           else
@@ -30,18 +28,20 @@ module API
       end
 
       rescue_from Grape::Exceptions::ValidationErrors do |e|
-        error!({ error: 'Community id is invalid',
+        # TODO エラーメッセージ考える
+        error!({ error: 'parameter is invalid',
                  detail: "#{e.message}" },
-               400)
+                 400)
       end
 
       rescue_from :all do |e|
         error!({ error: 'Internal server error',
                  detail: "#{e.message}" },
-               500)
+                 500)
       end
 
       mount API::V1::Communities
+      mount API::V1::Users
 
       route :any, '*path' do
         error!({ error:  'Route Not Found',
