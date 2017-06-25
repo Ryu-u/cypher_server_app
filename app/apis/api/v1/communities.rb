@@ -5,6 +5,9 @@ module API
       formatter :json, Grape::Formatter::Jbuilder
 
       resource :communities do
+        before do
+          authenticate!
+        end
 
         desc 'コミュニティ詳細取得'
         params do
@@ -12,6 +15,7 @@ module API
           optional :since_id, type: Integer
           optional :limit, type: Integer
         end
+
         get '/:id', jbuilder: 'v1/community' do
           @community = Community.find(params[:id])
           @past_cyphers = @community.cyphers.
@@ -24,7 +28,7 @@ module API
 
 
         get '/my_communities/:id', jbuilder: 'v1/community_summary' do
-          @communities = User.find(params[:id]).
+          @communities = @current_user.
                               participating_communities.
                               joins(:community_participants).
                               includes(:community_participants).
@@ -34,7 +38,7 @@ module API
         end
 
         get '/hosting_communities/:id', jbuilder: 'v1/community_summary' do
-          @communities = User.find(params[:id]).
+          @communities = @current_user.
                               hosting_communities.
                               joins(:community_hosts).
                               includes(:community_hosts).
@@ -44,7 +48,7 @@ module API
         end
 
         get '/following_communities/:id', jbuilder: 'v1/community_summary' do
-          @communities = User.find(params[:id]).
+          @communities = @current_user.
                               following_communities.
                               joins(:community_followers).
                               includes(:community_followers).
