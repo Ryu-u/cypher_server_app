@@ -7,6 +7,7 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.integer :type_flag, null: false
       t.string :twitter_account
       t.string :facebook_account
+      t.string :google_account
       t.string :thumbnail_url
 
       t.timestamps

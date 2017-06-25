@@ -13,12 +13,14 @@
 ActiveRecord::Schema.define(version: 20170620070735) do
 
   create_table "api_keys", force: :cascade do |t|
-    t.string   "access_token", null: false
     t.integer  "user_id",      null: false
+    t.string   "access_token", null: false
+    t.string   "firebase_uid", null: false
     t.datetime "expires_at"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.index ["access_token"], name: "index_api_keys_on_access_token", unique: true
+    t.index ["firebase_uid"], name: "index_api_keys_on_firebase_uid"
     t.index ["user_id"], name: "index_api_keys_on_user_id"
   end
 
@@ -131,6 +133,7 @@ ActiveRecord::Schema.define(version: 20170620070735) do
     t.integer  "type_flag",        null: false
     t.string   "twitter_account"
     t.string   "facebook_account"
+    t.string   "google_account"
     t.string   "thumbnail_url"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
