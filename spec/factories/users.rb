@@ -9,5 +9,11 @@ FactoryGirl.define do
     facebook_account {"#{name}_fb".downcase}
     thumbnail_url {Faker::File.file_name('path/to/',
                                         "#{name}", 'jpg')}
+
+    trait :with_api_key do
+      after(:create) do |user|
+        create(:api_key, user: user)
+      end
+    end
   end
 end
