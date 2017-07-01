@@ -6,9 +6,9 @@ module API
 
       resource :users do
         params do
-          requires :firebase_uid,     type: String
+            requires :firebase_uid, type: String
         end
-        get '/login' do
+        post '/login' do
           trying_user_key = ApiKey.find_by(firebase_uid: params[:firebase_uid])
           if trying_user_key.nil?
             status :not_found
