@@ -27,4 +27,11 @@ class User < ApplicationRecord
   validates :home, presence: true
   validates :bio, presence: true
   validates :type_flag, presence: true
+
+  include FlagShihTzu
+
+  has_flags 1 => :mc,
+            2 => :dj,
+            3 => :trackmaker,
+            :column => 'type_flag'
 end
