@@ -38,6 +38,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'tod'
 gem 'flag_shih_tzu'
 gem 'rails_admin'
+gem 'carrierwave', '~> 1.0'
 
 gem 'grape'
 gem 'grape-jbuilder'
