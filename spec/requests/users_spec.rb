@@ -39,8 +39,11 @@ RSpec.describe "Users", type: :request do
       @statuses = {name:"AAA",
                    home:"BBB",
                    bio: "CCC",
-                   type_flag:1,
+                   mc_flag: true,
+                   dj_flag: true,
+                   trackmaker_flag: true,
                    firebase_uid:"DDD",
+                   thumbnail: "https://1.bp.blogspot.com/-GqgqXly7B7E/WJmxcNC2s7I/AAAAAAABBmc/8gC8azTAg8Ioxsi8JFqx1s6NY6A8B3UyACLcB/s400/ufo_ushi.png",
                    twitter_account:"aaa"}
 
     end
@@ -62,17 +65,20 @@ RSpec.describe "Users", type: :request do
         expect(user.name).to eq(@statuses[:name])
         expect(user.home).to eq(@statuses[:home])
         expect(user.bio).to eq(@statuses[:bio])
-        expect(user.type_flag).to eq(@statuses[:type_flag])
         expect(user.api_keys.last.firebase_uid).to eq(@statuses[:firebase_uid])
         expect(user.twitter_account).to eq(@statuses[:twitter_account])
+        expect(user.mc?).to be true
+        expect(user.dj?).to be true
+        expect(user.trackmaker?).to be true
+        expect(user.thumbnail.url).to eq("/uploads/user/#{user.id}/ufo_ushi.png")
       end
     end
 
     context 'abnormal' do
-      it 'return status 500' do
+      it 'return status 400' do
         @statuses[:name] = nil
         post "/api/v1/users/signup", @statuses.to_json, 'CONTENT_TYPE' => 'application/json'
-        expect(response.status).to eq(500)
+        expect(response.status).to eq(400)
       end
     end
   end
