@@ -33,7 +33,7 @@ module API
           requires :dj_flag,          type: Boolean
           requires :trackmaker_flag,  type: Boolean
           requires :firebase_uid,     type: String
-          optional :thumbnail,        type: Hash
+          optional :thumbnail,        type: String
           at_least_one_of :twitter_account,
                           :facebook_account,
                           :google_account,
@@ -42,20 +42,21 @@ module API
         # TODO thumbnailはcarrierwaveで修正する
 
         post '/signup' do
-          @signup_user = User.create(
+          @signup_user = User.new(
                                      name:              params[:name],
                                      home:              params[:home],
                                      bio:               params[:bio],
                                      twitter_account:   params[:twitter_account],
                                      facebook_account:  params[:facebook_account],
                                      google_account:    params[:google_account],
-                                     thumbnail_url:     params[:thumbnail]
                                      )
+
+          @signup_user.remote_thumbnail_url = params[:thumbnail]
 
           @signup_user.mc         = true if params[:mc_flag]
           @signup_user.dj         = true if params[:dj_flag]
           @signup_user.trackmaker = true if params[:trackmaker_flag]
-          @signup_user.save
+          @signup_user.save!
 
           signup_users_api_key = ApiKey.new(firebase_uid: params[:firebase_uid])
           @signup_user.api_keys << signup_users_api_key
