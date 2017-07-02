@@ -24,7 +24,15 @@ module API
       end
 
       rescue_from ActiveRecord::RecordNotFound do |e|
-        error!({ error: 'Not Found', detail: "#{e.message}" }, 404)
+        error!({ error: 'Not Found',
+                 detail: "#{e.message}" },
+                 404)
+      end
+
+      rescue_from ActiveRecord::RecordInvalid do |e|
+        error!({ error: 'parameter is invalid',
+                 detail: "#{e.message}" },
+                 400)
       end
 
       rescue_from Grape::Exceptions::ValidationErrors do |e|
