@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20170620070735) do
     t.text     "bio",              null: false
     t.string   "twitter_account"
     t.string   "facebook_account"
-    t.string   "thumbnail_url"
+    t.string   "thumbnail"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.index ["name"], name: "index_communities_on_name", unique: true
@@ -134,7 +134,7 @@ ActiveRecord::Schema.define(version: 20170620070735) do
     t.string   "twitter_account"
     t.string   "facebook_account"
     t.string   "google_account"
-    t.string   "thumbnail_url"
+    t.string   "thumbnail"
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
   end

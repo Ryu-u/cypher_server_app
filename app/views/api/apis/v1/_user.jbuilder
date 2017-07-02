@@ -28,4 +28,4 @@ json.participating_communities do
   end
 end
 
-json.thumbnail_url      user.thumbnail_url
+json.thumbnail_url      user.thumbnail

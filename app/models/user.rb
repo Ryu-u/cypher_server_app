@@ -34,4 +34,7 @@ class User < ApplicationRecord
             2 => :dj,
             3 => :trackmaker,
             :column => 'type_flag'
+
+  mount_uploader :thumbnail, UserThumbnailUploader
+  serialize :thumbnail, JSON
 end

@@ -7,8 +7,7 @@ FactoryGirl.define do
     type_flag 1
     twitter_account {"#{name}_tw".downcase}
     facebook_account {"#{name}_fb".downcase}
-    thumbnail_url {Faker::File.file_name('path/to/',
-                                        "#{name}", 'jpg')}
+    thumbnail {Faker::File.file_name("#{name}", 'jpg')}
 
     trait :with_api_key do
       after(:create) do |user|

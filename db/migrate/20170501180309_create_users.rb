@@ -8,7 +8,7 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.string :twitter_account
       t.string :facebook_account
       t.string :google_account
-      t.string :thumbnail_url
+      t.string :thumbnail
 
       t.timestamps
     end
