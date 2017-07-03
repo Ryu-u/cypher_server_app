@@ -9,8 +9,7 @@ FactoryGirl.define do
     bio {Faker::ChuckNorris.fact}
     facebook_account {"#{name}_fb".downcase}
     twitter_account {"#{name}_tw".downcase}
-    thumbnail_url {Faker::File.file_name('path/to/',
-                                        "#{name}" + '_fb', 'jpg')}
+    thumbnail {Faker::File.file_name("#{name}", 'jpg')}
 
     trait :with_host do
       after(:create) do |community|
