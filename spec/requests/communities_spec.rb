@@ -53,10 +53,14 @@ RSpec.describe "Communities", type: :request do
                       name:                           String,
                       home:                           String,
                       bio:                            String,
-                      type_flag:                      Integer,
                       twitter_account:                String,
                       facebook_account:               String,
                       google_account:                 String,
+                      type:{
+                          mc_flag:                    Boolean,
+                          dj_flag:                    Boolean,
+                          trackmaker_flag:            Boolean
+                      },
                       participating_cyphers:          [],
                       participating_communities:      [],
                       thumbnail_url:                  String
@@ -68,10 +72,14 @@ RSpec.describe "Communities", type: :request do
                       name:                           String,
                       home:                           String,
                       bio:                            String,
-                      type_flag:                      Integer,
                       twitter_account:                String,
                       facebook_account:               String,
                       google_account:                 String,
+                      type:{
+                          mc_flag:                    Boolean,
+                          dj_flag:                    Boolean,
+                          trackmaker_flag:            Boolean
+                      },
                       participating_cyphers:          [],
                       participating_communities:      Array,
                       thumbnail_url:                  String
@@ -141,10 +149,14 @@ RSpec.describe "Communities", type: :request do
                       name:                           String,
                       home:                           String,
                       bio:                            String,
-                      type_flag:                      Integer,
                       twitter_account:                String,
                       facebook_account:               String,
                       google_account:                 String,
+                      type:{
+                          mc_flag:                    Boolean,
+                          dj_flag:                    Boolean,
+                          trackmaker_flag:            Boolean
+                      },
                       participating_cyphers:          [],
                       participating_communities:      [],
                       thumbnail_url:                  String
@@ -156,7 +168,11 @@ RSpec.describe "Communities", type: :request do
                       name:                           String,
                       home:                           String,
                       bio:                            String,
-                      type_flag:                      Integer,
+                      type:{
+                          mc_flag:                    Boolean,
+                          dj_flag:                    Boolean,
+                          trackmaker_flag:            Boolean
+                      },
                       twitter_account:                String,
                       facebook_account:               String,
                       google_account:                 String,
@@ -169,7 +185,11 @@ RSpec.describe "Communities", type: :request do
                       name:                           String,
                       home:                           String,
                       bio:                            String,
-                      type_flag:                      Integer,
+                      type:{
+                          mc_flag:                    Boolean,
+                          dj_flag:                    Boolean,
+                          trackmaker_flag:            Boolean
+                      },
                       twitter_account:                String,
                       facebook_account:               String,
                       google_account:                 String,
@@ -182,7 +202,11 @@ RSpec.describe "Communities", type: :request do
                       name:                           String,
                       home:                           String,
                       bio:                            String,
-                      type_flag:                      Integer,
+                      type:{
+                          mc_flag:                    Boolean,
+                          dj_flag:                    Boolean,
+                          trackmaker_flag:            Boolean
+                      },
                       twitter_account:                String,
                       facebook_account:               String,
                       google_account:                 String,
