@@ -2,10 +2,15 @@ json.id                 user.id
 json.name               user.name
 json.home               user.home
 json.bio                user.bio
-json.type_flag          user.type_flag
 json.twitter_account    user.twitter_account
 json.facebook_account   user.facebook_account
 json.google_account     user.google_account
+
+json.type do
+  json.mc_flag         user.mc?
+  json.dj_flag         user.dj?
+  json.trackmaker_flag user.trackmaker?
+end
 
 json.participating_cyphers do
   if user.participating_cyphers.nil?
