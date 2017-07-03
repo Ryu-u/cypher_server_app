@@ -15,11 +15,13 @@ RSpec.describe "Communities", type: :request do
     @future_cyphers = @community.cyphers.
                                   where('cypher_from >= ?', Date.today.to_datetime).
                                   order(:cypher_from).all
+    @current_user = create(:user, :with_api_key)
+    @headers = {'Access-Token' => @current_user.api_keys.last.access_token}
   end
 
   describe 'return status' do
     it 'return 200 OK' do
-      get "/api/v1/communities/#{@community.id}"
+      get "/api/v1/communities/#{@community.id}", headers: @headers
       expect(response.status).to eq(200)
     end
   end
@@ -102,7 +104,7 @@ RSpec.describe "Communities", type: :request do
               ].ignore_extra_values!
           }
       }
-      get "/api/v1/communities/#{@community.id}"
+      get "/api/v1/communities/#{@community.id}", headers: @headers
       expect(response.body).to match_json_expression(pattern)
     end
 
@@ -239,24 +241,24 @@ RSpec.describe "Communities", type: :request do
               ].ordered!
           }
       }
-      get "/api/v1/communities/#{@community.id}"
+      get "/api/v1/communities/#{@community.id}", headers: @headers
       expect(response.body).to match_json_expression(pattern)
     end
   end
 
   describe 'error hundling' do
     it 'cannot find the community' do
-      get "/api/v1/communities/123456789"
+      get "/api/v1/communities/123456789", headers: @headers
       expect(response.status).to eq(404)
     end
 
     it 'parameter invalid' do
-      get "/api/v1/communities/aaa"
+      get "/api/v1/communities/aaa", headers: @headers
       expect(response.status).to eq(400)
     end
 
     it 'invalid route error' do
-      get "/api/v1/community/1"
+      get "/api/v1/community/1", headers: @headers
       expect(response.status).to eq(500)
     end
   end
