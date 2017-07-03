@@ -18,4 +18,7 @@ class Community < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates :home, presence: true
   validates :bio, presence: true
+
+  mount_uploader :thumbnail, CommunityThumbnailUploader
+  serialize :thumbnail, JSON
 end
