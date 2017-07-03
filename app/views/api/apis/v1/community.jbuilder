@@ -6,7 +6,7 @@ json.community do
   json.bio              @community.bio
   json.twitter_account  @community.twitter_account
   json.facebook_account @community.facebook_account
-  json.thumbnail_url    @community.thumbnail
+  json.thumbnail_url    @community.thumbnail.url
 
   json.tags do
    if @community.tags.nil?

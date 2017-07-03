@@ -1,6 +1,6 @@
 json.id               community.id
 json.name             community.name
-json.thumbnail_url    community.thumbnail
+json.thumbnail_url    community.thumbnail.url
 json.next_cypher do
   json.array! community.cyphers.
                         where('cypher_from >= ?', Date.today.to_datetime).
