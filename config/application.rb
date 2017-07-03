@@ -20,3 +20,11 @@ module CypherServer
     end
   end
 end
+
+# rubyにbooleanクラスがないためここに残す
+module Boolean; end
+class TrueClass; include Boolean; end
+class FalseClass; include Boolean; end
+
+true.is_a?(Boolean) #=> true
+false.is_a?(Boolean) #=> true
