@@ -31,6 +31,7 @@ describe User do
       it { is_expected.to have_many(:cypher_participants) }
       it { is_expected.to have_many(:participating_cyphers).through(:cypher_participants) }
       it { is_expected.to have_many(:posts)}
+      it { is_expected.to have_many(:api_keys)}
     end
   end
 end
