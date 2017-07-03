@@ -9,7 +9,7 @@ FactoryGirl.define do
     bio {Faker::ChuckNorris.fact}
     facebook_account {"#{name}_fb".downcase}
     twitter_account {"#{name}_tw".downcase}
-    thumbnail {Faker::File.file_name("#{name}", 'jpg')}
+    thumbnail {Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'dummy', 'dummy.jpg'), 'image/jpg')}
 
     trait :with_host do
       after(:create) do |community|
