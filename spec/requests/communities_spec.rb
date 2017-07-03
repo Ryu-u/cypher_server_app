@@ -115,7 +115,7 @@ RSpec.describe "Communities", type: :request do
               bio:              @community.bio,
               twitter_account:  @community.twitter_account,
               facebook_account: @community.facebook_account,
-              thumbnail_url:    @community.thumbnail_url,
+              thumbnail_url:    @community.thumbnail,
               tags: [
                   {
                       id:           @community.tags[0].id,
