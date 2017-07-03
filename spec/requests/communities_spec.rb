@@ -9,6 +9,7 @@ RSpec.describe "Communities", type: :request do
                         :with_cypher,
                         :with_regular_cypher,
                         :with_tag)
+
     @past_cyphers = @community.cyphers.
                                 where('cypher_from < ?', Date.today.to_datetime).
                                 order(cypher_from: :desc).all
@@ -55,6 +56,7 @@ RSpec.describe "Communities", type: :request do
                       type_flag:                      Integer,
                       twitter_account:                String,
                       facebook_account:               String,
+                      google_account:                 String,
                       participating_cyphers:          [],
                       participating_communities:      [],
                       thumbnail_url:                  String
@@ -69,6 +71,7 @@ RSpec.describe "Communities", type: :request do
                       type_flag:                      Integer,
                       twitter_account:                String,
                       facebook_account:               String,
+                      google_account:                 String,
                       participating_cyphers:          [],
                       participating_communities:      Array,
                       thumbnail_url:                  String
@@ -117,7 +120,7 @@ RSpec.describe "Communities", type: :request do
               bio:              @community.bio,
               twitter_account:  @community.twitter_account,
               facebook_account: @community.facebook_account,
-              thumbnail_url:    @community.thumbnail,
+              thumbnail_url:    @community.thumbnail.url,
               tags: [
                   {
                       id:           @community.tags[0].id,
@@ -141,6 +144,7 @@ RSpec.describe "Communities", type: :request do
                       type_flag:                      Integer,
                       twitter_account:                String,
                       facebook_account:               String,
+                      google_account:                 String,
                       participating_cyphers:          [],
                       participating_communities:      [],
                       thumbnail_url:                  String
@@ -155,6 +159,7 @@ RSpec.describe "Communities", type: :request do
                       type_flag:                      Integer,
                       twitter_account:                String,
                       facebook_account:               String,
+                      google_account:                 String,
                       participating_cyphers:          [],
                       participating_communities:      Array,
                       thumbnail_url:                  String
@@ -167,6 +172,7 @@ RSpec.describe "Communities", type: :request do
                       type_flag:                      Integer,
                       twitter_account:                String,
                       facebook_account:               String,
+                      google_account:                 String,
                       participating_cyphers:          [],
                       participating_communities:      Array,
                       thumbnail_url:                  String
@@ -179,6 +185,7 @@ RSpec.describe "Communities", type: :request do
                       type_flag:                      Integer,
                       twitter_account:                String,
                       facebook_account:               String,
+                      google_account:                 String,
                       participating_cyphers:          [],
                       participating_communities:      Array,
                       thumbnail_url:                  String
