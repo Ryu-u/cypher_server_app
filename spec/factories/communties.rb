@@ -4,7 +4,7 @@ FactoryGirl.define do
                               :participating_community,
                               :following_community] do
 
-    name {Faker::Team.name}
+    name {Faker::Team.unique.name}
     home {Faker::Address.city}
     bio {Faker::ChuckNorris.fact}
     facebook_account {"#{name}_fb".downcase}
