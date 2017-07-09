@@ -26,10 +26,7 @@ RSpec.describe "Communities", type: :request do
       expect(response.status).to eq(200)
     end
   end
-
-  # User型については、ここでは内容の一致はidのみに留める。
-  # 詳細な内容の一致については、User型のテスト内で実施
-  # CypherSummary型を使うものについても同様
+  # TODO regular_cypher 変更
   describe 'response of community' do
     it 'matches the data-type pattern' do
       pattern = {
@@ -47,78 +44,22 @@ RSpec.describe "Communities", type: :request do
                       content: String
                   }
               ].ignore_extra_values!,
-              hosts: [
-                  {
-                      id:                             Integer,
-                      name:                           String,
-                      home:                           String,
-                      bio:                            String,
-                      twitter_account:                String,
-                      facebook_account:               String,
-                      google_account:                 String,
-                      type:{
-                          mc_flag:                    Boolean,
-                          dj_flag:                    Boolean,
-                          trackmaker_flag:            Boolean
-                      },
-                      participating_cyphers:          [],
-                      participating_communities:      [],
-                      thumbnail_url:                  String
-                  }
-              ].ignore_extra_values!,
-              members: [
-                  {
-                      id:                             Integer,
-                      name:                           String,
-                      home:                           String,
-                      bio:                            String,
-                      twitter_account:                String,
-                      facebook_account:               String,
-                      google_account:                 String,
-                      type:{
-                          mc_flag:                    Boolean,
-                          dj_flag:                    Boolean,
-                          trackmaker_flag:            Boolean
-                      },
-                      participating_cyphers:          [],
-                      participating_communities:      Array,
-                      thumbnail_url:                  String
-                  }
-              ].ignore_extra_values!,
+              hosts:            Array,
+              members:          Array,
               regular_cypher: {
                       place:              String,
                       cypher_day:         Integer,
                       cypher_from:        String,
                       cypher_to:          String
               },
-              past_cyphers: [
-                  {
-                      id:                 Integer,
-                      name:               String,
-                      serial_num:         Integer,
-                      cypher_from:        String,
-                      cypher_to:          String,
-                      capacity:           Integer,
-                      thumbnail_url:      String
-                  }
-              ].ignore_extra_values!,
-              future_cyphers: [
-                  {
-                      id:                 Integer,
-                      name:               String,
-                      serial_num:         Integer,
-                      cypher_from:        String,
-                      cypher_to:          String,
-                      capacity:           Integer,
-                      thumbnail_url:      String
-                  }
-              ].ignore_extra_values!
+              past_cyphers:     Array,
+              future_cyphers:   Array
           }
       }
       get "/api/v1/communities/#{@community.id}", headers: @headers
       expect(response.body).to match_json_expression(pattern)
     end
-
+    # TODO regular_cypher 変更
     it 'matches the data-content pattern' do
       pattern = {
           community: {
@@ -146,74 +87,18 @@ RSpec.describe "Communities", type: :request do
               hosts: [
                   {
                       id:                             @community.hosts.first.id,
-                      name:                           String,
-                      home:                           String,
-                      bio:                            String,
-                      twitter_account:                String,
-                      facebook_account:               String,
-                      google_account:                 String,
-                      type:{
-                          mc_flag:                    Boolean,
-                          dj_flag:                    Boolean,
-                          trackmaker_flag:            Boolean
-                      },
-                      participating_cyphers:          [],
-                      participating_communities:      [],
-                      thumbnail_url:                  String
-                  }
+                  }.ignore_extra_keys!
               ].ignore_extra_values!,
               members: [
                   {
                       id:                             @community.participants[0].id,
-                      name:                           String,
-                      home:                           String,
-                      bio:                            String,
-                      type:{
-                          mc_flag:                    Boolean,
-                          dj_flag:                    Boolean,
-                          trackmaker_flag:            Boolean
-                      },
-                      twitter_account:                String,
-                      facebook_account:               String,
-                      google_account:                 String,
-                      participating_cyphers:          [],
-                      participating_communities:      Array,
-                      thumbnail_url:                  String
-                  },
+                  }.ignore_extra_keys!,
                   {
                       id:                             @community.participants[1].id,
-                      name:                           String,
-                      home:                           String,
-                      bio:                            String,
-                      type:{
-                          mc_flag:                    Boolean,
-                          dj_flag:                    Boolean,
-                          trackmaker_flag:            Boolean
-                      },
-                      twitter_account:                String,
-                      facebook_account:               String,
-                      google_account:                 String,
-                      participating_cyphers:          [],
-                      participating_communities:      Array,
-                      thumbnail_url:                  String
-                  },
+                  }.ignore_extra_keys!,
                   {
                       id:                             @community.participants[2].id,
-                      name:                           String,
-                      home:                           String,
-                      bio:                            String,
-                      type:{
-                          mc_flag:                    Boolean,
-                          dj_flag:                    Boolean,
-                          trackmaker_flag:            Boolean
-                      },
-                      twitter_account:                String,
-                      facebook_account:               String,
-                      google_account:                 String,
-                      participating_cyphers:          [],
-                      participating_communities:      Array,
-                      thumbnail_url:                  String
-                  }
+                  }.ignore_extra_keys!
               ].unordered!,
               regular_cypher: {
                   place:              @community.regular_cypher.place,
@@ -224,51 +109,21 @@ RSpec.describe "Communities", type: :request do
               past_cyphers: [
                   {
                       id:                 @past_cyphers[0].id,
-                      name:               String,
-                      serial_num:         Integer,
-                      cypher_from:        String,
-                      cypher_to:          String,
-                      capacity:           Integer,
-                      thumbnail_url:      String
-                  },
+                  }.ignore_extra_keys!,
                   {
                       id:                 @past_cyphers[1].id,
-                      name:               String,
-                      serial_num:         Integer,
-                      cypher_from:        String,
-                      cypher_to:          String,
-                      capacity:           Integer,
-                      thumbnail_url:      String
-                  }
+                  }.ignore_extra_keys!
               ].ordered!,
               future_cyphers: [
                   {
                       id:                 @future_cyphers[0].id,
-                      name:               String,
-                      serial_num:         Integer,
-                      cypher_from:        String,
-                      cypher_to:          String,
-                      capacity:           Integer,
-                      thumbnail_url:      String
-                  },
+                  }.ignore_extra_keys!,
                   {
                       id:                 @future_cyphers[1].id,
-                      name:               String,
-                      serial_num:         Integer,
-                      cypher_from:        String,
-                      cypher_to:          String,
-                      capacity:           Integer,
-                      thumbnail_url:      String
-                  },
+                  }.ignore_extra_keys!,
                   {
                       id:                 @future_cyphers[2].id,
-                      name:               String,
-                      serial_num:         Integer,
-                      cypher_from:        String,
-                      cypher_to:          String,
-                      capacity:           Integer,
-                      thumbnail_url:      String
-                  }
+                  }.ignore_extra_keys!
               ].ordered!
           }
       }
