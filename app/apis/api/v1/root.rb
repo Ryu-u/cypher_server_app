@@ -50,6 +50,7 @@ module API
 
       mount API::V1::Communities
       mount API::V1::Users
+      mount API::V1::Cyphers
 
       route :any, '*path' do
         error!({ error:  'Route Not Found',
