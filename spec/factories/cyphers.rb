@@ -10,8 +10,7 @@ FactoryGirl.define do
     info {Faker::ChuckNorris.fact}
     cypher_from Date.today.to_datetime
     cypher_to Date.today.to_datetime
-    place "豊中"
-    host_id 1
-    capacity 1
+    place {Faker::Address.city}
+    capacity 10
   end
 end
