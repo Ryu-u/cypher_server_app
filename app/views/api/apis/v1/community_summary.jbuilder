@@ -4,4 +4,3 @@ json.communities do
   end
 end
 json.total      @communities_total
-json.current_page  @current_page
