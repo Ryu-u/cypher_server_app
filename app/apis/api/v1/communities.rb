@@ -23,58 +23,59 @@ module API
       end
       resource :my_communities do
         params do
-          requires :page, type: Integer
+          requires :since_id,     type: Integer
         end
 
         get '/', jbuilder: 'v1/community_summary' do
           authenticate!
-          @communities = @current_user.
+          all_communities = @current_user.
                               participating_communities.
                               joins(:community_participants).
                               includes(:community_participants).
-                              order("community_participants.created_at DESC").
-                              page(params[:page])
+                              where(["communities.id > :since_id",
+                                    {since_id:    params[:since_id]}]).
+                              order("communities.id ASC")
+          @communities = all_communities.limit(20)
           @communities_total = @current_user.
-                                  participating_communities.count
-          @current_page = params[:page]
+                              participating_communities.count
         end
       end
 
       resource :hosting_communities do
         params do
-          requires :page, type: Integer
+          requires :since_id, type: Integer
         end
 
         get '/', jbuilder: 'v1/community_summary' do
           authenticate!
-          @communities = @current_user.
+          all_communities = @current_user.
                               hosting_communities.
-                              joins(:community_hosts).
-                              includes(:community_hosts).
-                              order("community_hosts.created_at DESC").
-                              page(params[:page])
+                              where(["communities.id > :since_id",
+                                     {since_id:    params[:since_id]}]).
+                              order("communities.id ASC")
+          @communities = all_communities.limit(20)
           @communities_total = @current_user.
                                     hosting_communities.count
-          @current_page = params[:page]
         end
       end
 
       resource :following_communities do
         params do
-          requires :page, type: Integer
+          requires :since_id, type: Integer
         end
 
         get '/', jbuilder: 'v1/community_summary' do
           authenticate!
-          @communities = @current_user.
+          all_communities = @current_user.
                               following_communities.
                               joins(:community_followers).
                               includes(:community_followers).
-                              order("community_followers.created_at DESC").
-                              page(params[:page])
+                              where(["communities.id > :since_id",
+                                     {since_id:    params[:since_id]}]).
+                              order("communities.id ASC")
+          @communities = all_communities.limit(20)
           @communities_total = @current_user.
                                   following_communities.count
-          @current_page = params[:page]
         end
       end
     end
