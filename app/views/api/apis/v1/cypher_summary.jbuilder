@@ -4,4 +4,3 @@ json.cyphers do
   end
 end
 json.total @cyphers_total
-json.current_page  @current_page
