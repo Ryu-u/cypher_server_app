@@ -45,6 +45,9 @@ GEM
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
+    baby_squeel (1.1.5)
+      activerecord (>= 4.2.0)
+      polyamorous (~> 1.3)
     bindex (0.5.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
@@ -87,7 +90,7 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
-    faker (1.7.3)
+    faker (1.8.0)
       i18n (~> 0.5)
     ffi (1.9.18-x64-mingw32)
     flag_shih_tzu (0.3.19)
@@ -95,12 +98,9 @@ GEM
       railties (>= 3.2, < 5.2)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
-    grape (0.19.2)
+    grape (1.0.0)
       activesupport
       builder
-      hashie (>= 2.1.0)
-      multi_json (>= 1.3.2)
-      multi_xml (>= 0.5.2)
       mustermann-grape (~> 1.0.0)
       rack (>= 1.3.0)
       rack-accept
@@ -115,7 +115,7 @@ GEM
       temple (>= 0.8.0)
       tilt
     hashie (3.5.5)
-    i18n (0.8.4)
+    i18n (0.8.6)
     ice_nine (0.11.2)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
@@ -152,7 +152,6 @@ GEM
     mini_portile2 (2.2.0)
     minitest (5.10.2)
     multi_json (1.12.1)
-    multi_xml (0.6.0)
     mustermann (1.0.0)
     mustermann-grape (1.0.0)
       mustermann (~> 1.0.0)
@@ -160,6 +159,8 @@ GEM
     nio4r (2.1.0)
     nokogiri (1.8.0-x64-mingw32)
       mini_portile2 (~> 2.2.0)
+    polyamorous (1.3.1)
+      activerecord (>= 3.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -241,7 +242,7 @@ GEM
       rspec-support (~> 3.6.0)
     rspec-support (3.6.0)
     rubyzip (1.2.1)
-    sass (3.4.24)
+    sass (3.4.25)
     sass-rails (5.0.6)
       railties (>= 4.0.0, < 6)
       sass (~> 3.1)
@@ -300,6 +301,7 @@ PLATFORMS
   x64-mingw32
 
 DEPENDENCIES
+  baby_squeel
   byebug
   capybara
   carrierwave (~> 1.0)
@@ -310,6 +312,7 @@ DEPENDENCIES
   flag_shih_tzu
   grape
   grape-jbuilder
+  hashie
   jbuilder (~> 2.5)
   jquery-rails
   json_expressions

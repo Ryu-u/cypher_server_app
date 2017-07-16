@@ -39,6 +39,8 @@ gem 'tod'
 gem 'flag_shih_tzu'
 gem 'rails_admin'
 gem 'carrierwave', '~> 1.0'
+gem 'baby_squeel'
+gem 'hashie'
 
 gem 'grape'
 gem 'grape-jbuilder'
