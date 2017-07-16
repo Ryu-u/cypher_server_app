@@ -151,14 +151,16 @@ RSpec.describe "Communities", type: :request do
 
   describe 'get /my_communities' do
     before do
-      @current_user = create(:user, :with_api_key)
-      @headers = {'Access-Token' => @current_user.api_keys.last.access_token}
-      @community = create(:community)
+      unless RSpec.current_example.metadata[:skipbefore]
+        @current_user = create(:user, :with_api_key)
+        @headers = {'Access-Token' => @current_user.api_keys.last.access_token}
+        @community = create(:community)
+      end
     end
     context 'normal' do
       it 'return 200' do
         @community.participants << @current_user
-        get '/api/v1/my_communities?page=1', headers: @headers
+        get '/api/v1/my_communities?since_id=0', headers: @headers
         expect(response.status).to eq(200)
       end
 
@@ -169,33 +171,31 @@ RSpec.describe "Communities", type: :request do
                     id:             Integer,
                     name:           String,
                     thumbnail_url:  String,
-                    next_cypher:    Array
+                    next_cyphers:    Array
                 }
             ].ignore_extra_values!,
 
-            total:           Integer,
-            current_page:    Integer
+            total:           Integer
         }
         @community.participants << @current_user
-        get '/api/v1/my_communities?page=1', headers: @headers
+        get '/api/v1/my_communities?since_id=0', headers: @headers
         expect(response.body).to match_json_expression(pattern)
       end
 
       it 'matches data-content pattern' do
         @community.participants << @current_user
-        get '/api/v1/my_communities?page=1', headers: @headers
+        get '/api/v1/my_communities?since_id=0', headers: @headers
         pattern = {
             communities: [
                 {
                     id:             @community.id,
                     name:           @community.name,
                     thumbnail_url:  @community.thumbnail.url,
-                    next_cypher:    Array
+                    next_cyphers:    Array
                 }
 
             ].ignore_extra_values!,
-            total:        @current_user.participating_communities.count,
-            current_page:    1
+            total:        @current_user.participating_communities.count
         }
         expect(response.body).to match_json_expression(pattern)
       end
@@ -208,7 +208,7 @@ RSpec.describe "Communities", type: :request do
         all_communities = @current_user.participating_communities.
             joins(:community_participants).
             includes(:community_participants).
-            order("community_participants.created_at DESC")
+            ordering{|community| [community.community_participants.created_at.desc, community.id.asc]}
         pattern = {
             communities: [
                 {
@@ -221,139 +221,85 @@ RSpec.describe "Communities", type: :request do
                     id:     all_communities[2].id
                 }.ignore_extra_keys!
             ],
-            total:        all_communities.count,
-            current_page:    1
+            total:        all_communities.count
         }
-        get '/api/v1/my_communities?page=1', headers: @headers
+        get '/api/v1/my_communities?since_id=1', headers: @headers
         expect(response.body).to match_json_expression(pattern)
       end
 
-      it 'paginate correctly' do
+      it 'paginate correctly', skipbefore: true do
         25.times do
           community = create(:community)
           community.participants << @current_user
         end
         all_communities = @current_user.participating_communities.
-            joins(:community_participants).
-            includes(:community_participants).
-            order("community_participants.created_at DESC")
+                                        joins(:community_participants).
+                                        includes(:community_participants).
+                                        order("communities.id ASC")
         pattern1 = {
             communities: [
-                {
-                    id:     all_communities[0].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[1].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[2].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[3].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[4].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[5].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[6].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[7].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[8].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[9].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[10].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[11].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[12].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[13].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[14].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[15].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[16].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[17].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[18].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[19].id
-                }.ignore_extra_keys!
+                {id:     all_communities[0].id}.ignore_extra_keys!,
+                {id:     all_communities[1].id}.ignore_extra_keys!,
+                {id:     all_communities[2].id}.ignore_extra_keys!,
+                {id:     all_communities[3].id}.ignore_extra_keys!,
+                {id:     all_communities[4].id}.ignore_extra_keys!,
+                {id:     all_communities[5].id}.ignore_extra_keys!,
+                {id:     all_communities[6].id}.ignore_extra_keys!,
+                {id:     all_communities[7].id}.ignore_extra_keys!,
+                {id:     all_communities[8].id}.ignore_extra_keys!,
+                {id:     all_communities[9].id}.ignore_extra_keys!,
+                {id:     all_communities[10].id}.ignore_extra_keys!,
+                {id:     all_communities[11].id}.ignore_extra_keys!,
+                {id:     all_communities[12].id}.ignore_extra_keys!,
+                {id:     all_communities[13].id}.ignore_extra_keys!,
+                {id:     all_communities[14].id}.ignore_extra_keys!,
+                {id:     all_communities[15].id}.ignore_extra_keys!,
+                {id:     all_communities[16].id}.ignore_extra_keys!,
+                {id:     all_communities[17].id}.ignore_extra_keys!,
+                {id:     all_communities[18].id}.ignore_extra_keys!,
+                {id:     all_communities[19].id}.ignore_extra_keys!
             ],
-            total:        all_communities.count,
-            current_page:    1
+            total:        25
         }
 
         pattern2 = {
             communities: [
-                {
-                    id:     all_communities[20].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[21].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[22].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[23].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[24].id
-                }.ignore_extra_keys!
+                {id:     all_communities[20].id}.ignore_extra_keys!,
+                {id:     all_communities[21].id}.ignore_extra_keys!,
+                {id:     all_communities[22].id}.ignore_extra_keys!,
+                {id:     all_communities[23].id}.ignore_extra_keys!,
+                {id:     all_communities[24].id}.ignore_extra_keys!
             ],
-            total:        all_communities.count,
-            current_page:    2
+            total:        25
         }
-        get '/api/v1/my_communities?page=1', headers: @headers
+        get '/api/v1/my_communities?since_id=0', headers: @headers
         expect(response.body).to match_json_expression(pattern1)
 
-        get '/api/v1/my_communities?page=2', headers: @headers
+        get "/api/v1/my_communities?since_id=#{all_communities[19].id}", headers: @headers
         expect(response.body).to match_json_expression(pattern2)
       end
 
       it 'return empty array' do
-        get '/api/v1/my_communities?page=1', headers: @headers
+        get '/api/v1/my_communities?since_id=9999', headers: @headers
         pattern ={
             communities: [],
-            total:       0,
-            current_page:   1
+            total:       0
         }
         expect(response.body).to match_json_expression(pattern)
       end
     end
 
     context 'abnormal' do
-      describe 'miss page ' do
+      describe 'miss since_id ' do
         it 'return 400' do
           get '/api/v1/my_communities', headers: @headers
           expect(response.status).to eq(400)
         end
       end
 
-      describe 'wrong type of page' do
+      describe 'wrong type of since_id' do
         it 'return 400' do
-          get '/api/v1/my_communities?page="a"', headers: @headers
+          get '/api/v1/my_communities?since_id=a', headers: @headers
           expect(response.status).to eq(400)
         end
       end
@@ -362,14 +308,16 @@ RSpec.describe "Communities", type: :request do
 
   describe 'get /hosting_communities' do
     before do
-      @current_user = create(:user, :with_api_key)
-      @headers = {'Access-Token' => @current_user.api_keys.last.access_token}
-      @community = create(:community)
+      unless RSpec.current_example.metadata[:skipbefore]
+        @current_user = create(:user, :with_api_key)
+        @headers = {'Access-Token' => @current_user.api_keys.last.access_token}
+        @community = create(:community)
+      end
     end
     context 'normal' do
       it 'return 200' do
         @community.hosts << @current_user
-        get '/api/v1/hosting_communities?page=1', headers: @headers
+        get '/api/v1/hosting_communities?since_id=0', headers: @headers
         expect(response.status).to eq(200)
       end
 
@@ -380,33 +328,31 @@ RSpec.describe "Communities", type: :request do
                     id:             Integer,
                     name:           String,
                     thumbnail_url:  String,
-                    next_cypher:    Array
+                    next_cyphers:    Array
                 }
             ].ignore_extra_values!,
 
-            total:           Integer,
-            current_page:    Integer
+            total:           Integer
         }
         @community.hosts << @current_user
-        get '/api/v1/hosting_communities?page=1', headers: @headers
+        get '/api/v1/hosting_communities?since_id=0', headers: @headers
         expect(response.body).to match_json_expression(pattern)
       end
 
       it 'matches data-content pattern' do
       @community.hosts << @current_user
-      get '/api/v1/hosting_communities?page=1', headers: @headers
+      get '/api/v1/hosting_communities?since_id=0', headers: @headers
         pattern = {
             communities: [
                 {
                     id:             @community.id,
                     name:           @community.name,
                     thumbnail_url:  @community.thumbnail.url,
-                    next_cypher:    Array
+                    next_cyphers:    Array
                 }
 
             ].ignore_extra_values!,
-            total:        @current_user.hosting_communities.count,
-            current_page:    1
+            total:        @current_user.hosting_communities.count
         }
         expect(response.body).to match_json_expression(pattern)
       end
@@ -417,144 +363,84 @@ RSpec.describe "Communities", type: :request do
           community.hosts << @current_user
         end
         all_communities = @current_user.hosting_communities.
-            joins(:community_hosts).
-            includes(:community_hosts).
-            order("community_hosts.created_at DESC")
+                                        joins(:community_hosts).
+                                        includes(:community_hosts).
+                                        order("communities.id ASC")
         pattern = {
             communities: [
-                {
-                    id:     all_communities[0].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[1].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[2].id
-                }.ignore_extra_keys!
+                {id:     all_communities[0].id}.ignore_extra_keys!,
+                {id:     all_communities[1].id}.ignore_extra_keys!,
+                {id:     all_communities[2].id}.ignore_extra_keys!
             ],
-            total:        all_communities.count,
-            current_page:    1
+            total:        all_communities.count
         }
-        get '/api/v1/hosting_communities?page=1', headers: @headers
+        get '/api/v1/hosting_communities?since_id=0', headers: @headers
         expect(response.body).to match_json_expression(pattern)
       end
 
-      it 'paginate correctly' do
+      it 'paginate correctly', skipbefore: true do
         25.times do
           community = create(:community)
           community.hosts << @current_user
         end
         all_communities = @current_user.hosting_communities.
-            joins(:community_hosts).
-            includes(:community_hosts).
-            order("community_hosts.created_at DESC")
+                                        order("communities.id ASC")
+
         pattern1 = {
             communities: [
-                {
-                    id:     all_communities[0].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[1].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[2].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[3].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[4].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[5].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[6].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[7].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[8].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[9].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[10].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[11].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[12].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[13].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[14].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[15].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[16].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[17].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[18].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[19].id
-                }.ignore_extra_keys!
+                {id:     all_communities[0].id}.ignore_extra_keys!,
+                {id:     all_communities[1].id}.ignore_extra_keys!,
+                {id:     all_communities[2].id}.ignore_extra_keys!,
+                {id:     all_communities[3].id}.ignore_extra_keys!,
+                {id:     all_communities[4].id}.ignore_extra_keys!,
+                {id:     all_communities[5].id}.ignore_extra_keys!,
+                {id:     all_communities[6].id}.ignore_extra_keys!,
+                {id:     all_communities[7].id}.ignore_extra_keys!,
+                {id:     all_communities[8].id}.ignore_extra_keys!,
+                {id:     all_communities[9].id}.ignore_extra_keys!,
+                {id:     all_communities[10].id}.ignore_extra_keys!,
+                {id:     all_communities[11].id}.ignore_extra_keys!,
+                {id:     all_communities[12].id}.ignore_extra_keys!,
+                {id:     all_communities[13].id}.ignore_extra_keys!,
+                {id:     all_communities[14].id}.ignore_extra_keys!,
+                {id:     all_communities[15].id}.ignore_extra_keys!,
+                {id:     all_communities[16].id}.ignore_extra_keys!,
+                {id:     all_communities[17].id}.ignore_extra_keys!,
+                {id:     all_communities[18].id}.ignore_extra_keys!,
+                {id:     all_communities[19].id}.ignore_extra_keys!
             ],
-            total:        all_communities.count,
-            current_page:    1
+            total:        25
         }
 
         pattern2 = {
             communities: [
-                {
-                    id:     all_communities[20].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[21].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[22].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[23].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[24].id
-                }.ignore_extra_keys!
+                {id:     all_communities[20].id}.ignore_extra_keys!,
+                {id:     all_communities[21].id}.ignore_extra_keys!,
+                {id:     all_communities[22].id}.ignore_extra_keys!,
+                {id:     all_communities[23].id}.ignore_extra_keys!,
+                {id:     all_communities[24].id}.ignore_extra_keys!
             ],
-            total:        all_communities.count,
-            current_page:    2
+            total:        25
         }
-        get '/api/v1/hosting_communities?page=1', headers: @headers
+        get '/api/v1/hosting_communities?since_id=0', headers: @headers
         expect(response.body).to match_json_expression(pattern1)
 
-        get '/api/v1/hosting_communities?page=2', headers: @headers
+        get "/api/v1/hosting_communities?since_id=#{all_communities[19].id}", headers: @headers
         expect(response.body).to match_json_expression(pattern2)
       end
     end
 
     context 'abnormal' do
-      describe 'miss page ' do
+      describe 'miss since_id ' do
         it 'return 400' do
           get '/api/v1/hosting_communities', headers: @headers
           expect(response.status).to eq(400)
         end
       end
 
-      describe 'wrong type of page' do
+      describe 'wrong type of since_id' do
         it 'return 400' do
-          get '/api/v1/hosting_communities?page="a"', headers: @headers
+          get '/api/v1/hosting_communities?since_id=a', headers: @headers
           expect(response.status).to eq(400)
         end
       end
@@ -563,14 +449,16 @@ RSpec.describe "Communities", type: :request do
 
   describe 'get /following_communities' do
     before do
-      @current_user = create(:user, :with_api_key)
-      @headers = {'Access-Token' => @current_user.api_keys.last.access_token}
-      @community = create(:community)
+      unless RSpec.current_example.metadata[:skipbefore]
+        @current_user = create(:user, :with_api_key)
+        @headers = {'Access-Token' => @current_user.api_keys.last.access_token}
+        @community = create(:community)
+      end
     end
     context 'normal' do
       it 'return 200' do
         @community.followers << @current_user
-        get '/api/v1/following_communities?page=1', headers: @headers
+        get '/api/v1/following_communities?since_id=0', headers: @headers
         expect(response.status).to eq(200)
       end
 
@@ -581,191 +469,130 @@ RSpec.describe "Communities", type: :request do
                     id:             Integer,
                     name:           String,
                     thumbnail_url:  String,
-                    next_cypher:    Array
+                    next_cyphers:    Array
                 }
             ].ignore_extra_values!,
 
-            total:           Integer,
-            current_page:    Integer
+            total:           Integer
         }
         @community.followers << @current_user
-        get '/api/v1/following_communities?page=1', headers: @headers
+        get '/api/v1/following_communities?since_id=0', headers: @headers
         expect(response.body).to match_json_expression(pattern)
       end
 
       it 'matches data-content pattern' do
         @community.followers << @current_user
-        get '/api/v1/following_communities?page=1', headers: @headers
+        get '/api/v1/following_communities?since_id=0', headers: @headers
         pattern = {
             communities: [
                 {
                     id:             @community.id,
                     name:           @community.name,
                     thumbnail_url:  @community.thumbnail.url,
-                    next_cypher:    Array
+                    next_cyphers:    Array
                 }
 
             ].ignore_extra_values!,
-            total:        @current_user.following_communities.count,
-            current_page:    1
+            total:        @current_user.following_communities.count
         }
         expect(response.body).to match_json_expression(pattern)
       end
 
-      it 'order correctly' do
+      it 'order correctly', skipbefore: true do
         3.times do
           community = create(:community)
           community.followers << @current_user
         end
         all_communities = @current_user.following_communities.
-            joins(:community_followers).
-            includes(:community_followers).
-            order("community_followers.created_at DESC")
+                                        joins(:community_followers).
+                                        includes(:community_followers).
+                                        order("communities.id ASC")
         pattern = {
             communities: [
-                {
-                    id:     all_communities[0].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[1].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[2].id
-                }.ignore_extra_keys!
+                {id:     all_communities[0].id}.ignore_extra_keys!,
+                {id:     all_communities[1].id}.ignore_extra_keys!,
+                {id:     all_communities[2].id}.ignore_extra_keys!
             ],
-            total:        all_communities.count,
-            current_page:    1
+            total:        all_communities.count
         }
-        get '/api/v1/following_communities?page=1', headers: @headers
+        get '/api/v1/following_communities?since_id=1', headers: @headers
         expect(response.body).to match_json_expression(pattern)
       end
 
-      it 'paginate correctly' do
+      it 'paginate correctly', skipbefore: true do
         25.times do
           community = create(:community)
           community.followers << @current_user
         end
         all_communities = @current_user.following_communities.
-            joins(:community_followers).
-            includes(:community_followers).
-            order("community_followers.created_at DESC")
+                                        joins(:community_followers).
+                                        includes(:community_followers).
+                                        order("communities.id ASC")
+
         pattern1 = {
             communities: [
-                {
-                    id:     all_communities[0].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[1].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[2].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[3].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[4].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[5].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[6].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[7].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[8].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[9].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[10].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[11].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[12].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[13].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[14].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[15].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[16].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[17].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[18].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[19].id
-                }.ignore_extra_keys!
+                {id:     all_communities[0].id}.ignore_extra_keys!,
+                {id:     all_communities[1].id}.ignore_extra_keys!,
+                {id:     all_communities[2].id}.ignore_extra_keys!,
+                {id:     all_communities[3].id}.ignore_extra_keys!,
+                {id:     all_communities[4].id}.ignore_extra_keys!,
+                {id:     all_communities[5].id}.ignore_extra_keys!,
+                {id:     all_communities[6].id}.ignore_extra_keys!,
+                {id:     all_communities[7].id}.ignore_extra_keys!,
+                {id:     all_communities[8].id}.ignore_extra_keys!,
+                {id:     all_communities[9].id}.ignore_extra_keys!,
+                {id:     all_communities[10].id}.ignore_extra_keys!,
+                {id:     all_communities[11].id}.ignore_extra_keys!,
+                {id:     all_communities[12].id}.ignore_extra_keys!,
+                {id:     all_communities[13].id}.ignore_extra_keys!,
+                {id:     all_communities[14].id}.ignore_extra_keys!,
+                {id:     all_communities[15].id}.ignore_extra_keys!,
+                {id:     all_communities[16].id}.ignore_extra_keys!,
+                {id:     all_communities[17].id}.ignore_extra_keys!,
+                {id:     all_communities[18].id}.ignore_extra_keys!,
+                {id:     all_communities[19].id}.ignore_extra_keys!
             ],
-            total:        all_communities.count,
-            current_page:    1
+            total:        25
         }
 
         pattern2 = {
             communities: [
-                {
-                    id:     all_communities[20].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[21].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[22].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[23].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[24].id
-                }.ignore_extra_keys!
+                {id:     all_communities[20].id}.ignore_extra_keys!,
+                {id:     all_communities[21].id}.ignore_extra_keys!,
+                {id:     all_communities[22].id}.ignore_extra_keys!,
+                {id:     all_communities[23].id}.ignore_extra_keys!,
+                {id:     all_communities[24].id}.ignore_extra_keys!
             ],
-            total:        all_communities.count,
-            current_page:    2
+            total:        25
         }
-        get '/api/v1/following_communities?page=1', headers: @headers
+        get '/api/v1/following_communities?since_id=0', headers: @headers
         expect(response.body).to match_json_expression(pattern1)
 
-        get '/api/v1/following_communities?page=2', headers: @headers
+        get "/api/v1/following_communities?since_id=#{all_communities[19].id}", headers: @headers
         expect(response.body).to match_json_expression(pattern2)
       end
 
       it 'return empty array' do
-        get '/api/v1/following_communities?page=1', headers: @headers
+        get '/api/v1/following_communities?since_id=0', headers: @headers
         pattern ={
             communities: [],
-            total:       0,
-            current_page:   1
+            total:       0
         }
         expect(response.body).to match_json_expression(pattern)
       end
     end
 
     context 'abnormal' do
-      describe 'miss page ' do
+      describe 'miss since_id ' do
         it 'return 400' do
           get '/api/v1/following_communities', headers: @headers
           expect(response.status).to eq(400)
         end
       end
 
-      describe 'wrong type of page' do
+      describe 'wrong type of since_id' do
         it 'return 400' do
-          get '/api/v1/following_communities?page="a"', headers: @headers
+          get '/api/v1/following_communities?since_id=a', headers: @headers
           expect(response.status).to eq(400)
         end
       end
