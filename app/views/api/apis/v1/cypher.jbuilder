@@ -15,4 +15,14 @@ json.cypher do
   json.community do
     json.partial! 'v1/_community_summary', community: @cypher.community
   end
+
+  json.tags do
+    if @cypher.tags.nil?
+      json.null!
+    else
+      json.array! @cypher.tags.all do |tag|
+        json.partial! 'v1/_tag', tag: tag
+      end
+    end
+  end
 end
