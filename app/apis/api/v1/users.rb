@@ -2,7 +2,7 @@ module API
   module V1
     class Users < Grape::API
       version 'v1', using: :path
-      format :json
+      formatter :json, Grape::Formatter::Jbuilder
 
       resource :users do
         params do
@@ -39,7 +39,6 @@ module API
                           :google_account,
                           type: String
         end
-        # TODO thumbnailはcarrierwaveで修正する
 
         post '/signup' do
           @signup_user = User.new(
@@ -66,6 +65,14 @@ module API
           status :created
         end
 
+        params do
+          requires :id , type: Integer
+        end
+
+        get '/:id', jbuilder: 'v1/user' do
+          authenticate!
+          @user = User.find(params[:id])
+        end
       end
     end
   end

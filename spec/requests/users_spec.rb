@@ -111,4 +111,95 @@ RSpec.describe "Users", type: :request do
       end
     end
   end
+
+  describe 'get /users/:id' do
+    before do
+      @current_user = create(:user, :with_api_key)
+      @headers = {'Access-Token' => @current_user.api_keys.last.access_token}
+      @user = create(:user)
+    end
+    context 'normal' do
+      it 'return 200' do
+        get "/api/v1/users/#{@user.id}", headers: @headers
+        expect(response.status).to eq(200)
+      end
+
+      it 'matches data-type pattern' do
+        pattern ={
+            user: {
+                id:                         Integer,
+                name:                       String,
+                home:                       String,
+                bio:                        String,
+                twitter_account:            String,
+                facebook_account:           String,
+                google_account:             String,
+                type:   {   mc_flag:          Boolean,
+                            dj_flag:          Boolean,
+                            trackmaker_flag:  Boolean
+                },
+                participating_cyphers:      Array,
+                participating_communities:  Array,
+                thumbnail_url:              String
+            }
+        }
+
+        get "/api/v1/users/#{@user.id}", headers: @headers
+        expect(response.body).to match_json_expression(pattern)
+      end
+
+      it 'matches data-content pattern' do
+        temp_community = create(:community,
+                                :with_cypher)
+
+        @user.participating_communities << temp_community
+
+        temp_cyphers = temp_community.cyphers.
+                                        where('cypher_from >= ?', Date.today.to_datetime).
+                                        order(:cypher_from)
+        temp_cyphers.each do |c|
+          @user.participating_cyphers << c
+        end
+        pattern ={
+            user:{
+                id:                         @user.id,
+                name:                       @user.name,
+                home:                       @user.home,
+                bio:                        @user.bio,
+                twitter_account:            @user.twitter_account,
+                facebook_account:           @user.facebook_account,
+                google_account:             @user.google_account,
+                type:   {   mc_flag:          @user.mc?,
+                            dj_flag:          @user.dj?,
+                            trackmaker_flag:  @user.trackmaker?
+                },
+                participating_cyphers:      [
+                    {id:  temp_cyphers[0].id}.ignore_extra_keys!,
+                    {id:  temp_cyphers[1].id}.ignore_extra_keys!,
+                    {id:  temp_cyphers[2].id}.ignore_extra_keys!
+                ],
+                participating_communities:  [
+                    {id:  temp_community.id}.ignore_extra_keys!
+                ],
+                thumbnail_url:              @user.thumbnail.url
+            }
+        }
+
+        get "/api/v1/users/#{@user.id}", headers: @headers
+        expect(response.body).to match_json_expression(pattern)
+      end
+    end
+
+    context 'abnormal' do
+      it 'wrong type of parameter' do
+        get '/api/v1/users/a', headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'user not found' do
+        get '/api/v1/users/9999', headers: @headers
+        expect(response.status).to eq(404)
+      end
+    end
+  end
 end
