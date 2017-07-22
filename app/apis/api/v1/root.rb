@@ -5,6 +5,7 @@ module API
       format :json
 
       helpers do
+        # アクセストークンを用いての認証メソッド
         def authenticate!
           if !current_user
             error!('Unauthorized. Invalid or expired token.', 401)
@@ -13,6 +14,7 @@ module API
           end
         end
 
+        # アクセスしてくるユーザーがサインアップ済か検証するメソッド
         def current_user
           token = ApiKey.where(access_token: request.headers['Access-Token']).last
           if token && !token.expired?
@@ -23,29 +25,31 @@ module API
         end
       end
 
+      # レコードが見つからない場合のチェック
       rescue_from ActiveRecord::RecordNotFound do |e|
         error!({ error: 'Not Found',
                  detail: "#{e.message}" },
-                 404)
+               404)
       end
 
+      # パラメータ不正チェック
       rescue_from ActiveRecord::RecordInvalid do |e|
         error!({ error: 'parameter is invalid',
                  detail: "#{e.message}" },
-                 400)
+               400)
       end
 
+      # grapeのパラメータチェック
       rescue_from Grape::Exceptions::ValidationErrors do |e|
-        # TODO エラーメッセージ考える
         error!({ error: 'parameter is invalid',
                  detail: "#{e.message}" },
-                 400)
+               400)
       end
 
       rescue_from :all do |e|
         error!({ error: 'Internal server error',
                  detail: "#{e.message}" },
-                 500)
+               500)
       end
 
       mount API::V1::Communities
