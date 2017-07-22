@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  serial_num: 1
+  community_id: 1
+  info: MyText
+  cypher_from: 2017-05-03 01:39:26
+  cypher_to: 2017-05-03 01:39:26
+  place: MyString
+  host_id: 1
+  capacity: 1
+
+two:
+  name: MyString
+  serial_num: 1
+  community_id: 1
+  info: MyText
+  cypher_from: 2017-05-03 01:39:26
+  cypher_to: 2017-05-03 01:39:26
+  place: MyString
+  host_id: 1
+  capacity: 1
