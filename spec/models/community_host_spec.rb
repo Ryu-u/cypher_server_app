@@ -8,13 +8,17 @@ describe CommunityHost do
     end
 
     context 'of index' do
-      it 'should not have two records whith have the same combination of community_id and host id' do
+      it 'should not have two records which have the same combination of community_id and host id' do
         expect do
-          community = Community.create(name: "aaaa", home: "aaaa", bio: "aaaa")
-          host = User.create(name: "aaaa", home: "aaaa", bio: "aaaa", type_flag:1)
+          # あらかじめコミュニティとホストを作成
+          community = create(:community)
+          host = create(:host)
           community.hosts << host
           community.save
-          community_host = CommunityHost.new(community_id: community.id, host_id: host.id)
+
+          #　重複するレコードを作成
+          community_host = CommunityHost.new(community_id: community.id,
+                                             host_id: host.id)
           community_host.save!(validate: false)
         end.to raise_error(ActiveRecord::RecordNotUnique)
       end

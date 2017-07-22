@@ -8,13 +8,17 @@ describe CommunityParticipant do
     end
 
     context 'of index' do
-      it 'should not have two records whith have the same combination of community_id and participant id' do
+      it 'should not have two records which have the same combination of community_id and participant id' do
         expect do
-          community = Community.create(name: "aaaa", home: "aaaa", bio: "aaaa")
-          participant = User.create(name: "aaaa", home: "aaaa", bio: "aaaa", type_flag:1)
+          # あらかじめコミュニティと参加者を作成
+          community = create(:community)
+          participant = create(:participant)
           community.participants << participant
-          community.save
-          community_participant = CommunityParticipant.new(community_id: community.id, participant_id: participant.id)
+          community.save!
+
+          #重複させるレコードを作成
+          community_participant = CommunityParticipant.new(community_id: community.id,
+                                                           participant_id: participant.id)
           community_participant.save!(validate: false)
         end.to raise_error(ActiveRecord::RecordNotUnique)
       end

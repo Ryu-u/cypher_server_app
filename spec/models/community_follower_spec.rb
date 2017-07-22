@@ -8,13 +8,17 @@ describe CommunityFollower do
     end
 
     context 'of index' do
-      it 'should not have two records whith have the same combination of community_id and follower id' do
+      it 'should not have two records with have the same combination of community_id and follower id' do
         expect do
-          community = Community.create(name: "aaaa", home: "aaaa", bio: "aaaa")
-          follower = User.create(name: "aaaa", home: "aaaa", bio: "aaaa", type_flag:1)
+          # あらかじめコミュニティとそのフォロワーを作成
+          community = create(:community)
+          follower = create(:follower)
           community.followers << follower
-          community.save
-          community_follower = CommunityFollower.new(community_id: community.id, follower_id: follower.id)
+          community.save!
+
+          #重複するためのレコードを作成
+          community_follower = CommunityFollower.new(community_id: community.id,
+                                                     follower_id: follower.id)
           community_follower.save!(validate: false)
         end.to raise_error(ActiveRecord::RecordNotUnique)
       end

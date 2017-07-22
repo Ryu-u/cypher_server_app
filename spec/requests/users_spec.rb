@@ -34,7 +34,6 @@ RSpec.describe "Users", type: :request do
   end
 
   describe 'post /signup' do
-    # TODO thumbnail url type_flag
     before do
       @statuses = {name:"AAA",
                    home:"BBB",
@@ -56,7 +55,7 @@ RSpec.describe "Users", type: :request do
       it 'response header has tokens' do
         post "/api/v1/users/signup", @statuses.to_json, 'CONTENT_TYPE' => 'application/json'
         expect(response.headers['Access-Token']).to eq(ApiKey.
-                                                       find_by(firebase_uid: @statuses[:firebase_uid]).access_token)
+            find_by(firebase_uid: @statuses[:firebase_uid]).access_token)
       end
 
       it 'create a user correctly' do
@@ -155,8 +154,8 @@ RSpec.describe "Users", type: :request do
         @user.participating_communities << temp_community
 
         temp_cyphers = temp_community.cyphers.
-                                        where('cypher_from >= ?', Date.today.to_datetime).
-                                        order(:cypher_from)
+            where('cypher_from >= ?', Date.today.to_datetime).
+            order(:cypher_from)
         temp_cyphers.each do |c|
           @user.participating_cyphers << c
         end
@@ -199,6 +198,99 @@ RSpec.describe "Users", type: :request do
       it 'user not found' do
         get '/api/v1/users/9999', headers: @headers
         expect(response.status).to eq(404)
+      end
+    end
+  end
+
+  describe 'put /users' do
+    before do
+      @current_user = create(:user, :with_api_key)
+      @headers = {'Access-Token' => @current_user.api_keys.last.access_token,
+                  'CONTENT_TYPE' => 'application/json'}
+      @statuses = {name:"AAA",
+                   home:"BBB",
+                   bio: "CCC",
+                   mc_flag: true,
+                   dj_flag: true,
+                   trackmaker_flag: true,
+                   thumbnail: "https://1.bp.blogspot.com/-GqgqXly7B7E/WJmxcNC2s7I/AAAAAAABBmc/8gC8azTAg8Ioxsi8JFqx1s6NY6A8B3UyACLcB/s400/ufo_ushi.png",
+                   twitter_account:"aaa"}
+    end
+    context 'normal' do
+      it 'return 200' do
+        put '/api/v1/users', params: @statuses.to_json, headers: @headers
+        expect(response.status).to eq(200)
+      end
+
+      it 'update correctly' do
+        put '/api/v1/users', params: @statuses.to_json, headers: @headers
+        expect(User.find(@current_user.id).name).to eq(@statuses[:name])
+        expect(User.find(@current_user.id).home).to eq(@statuses[:home])
+        expect(User.find(@current_user.id).bio).to eq(@statuses[:bio])
+        expect(User.find(@current_user.id).twitter_account).to eq(@statuses[:twitter_account])
+        expect(User.find(@current_user.id).mc?).to be true
+        expect(User.find(@current_user.id).dj?).to be true
+        expect(User.find(@current_user.id).trackmaker?).to be true
+        # TODO 画像の更新は後回し
+
+      end
+    end
+
+    context 'abnormal' do
+      it 'return 400' do
+        @statuses.delete(:name)
+        put '/api/v1/users', params: @statuses.to_json, headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 400' do
+        @statuses.delete(:home)
+        put '/api/v1/users', params: @statuses.to_json, headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 400' do
+        @statuses.delete(:bio)
+        put '/api/v1/users', params: @statuses.to_json, headers: @headers
+        expect(response.status).to eq(400)
+      end
+    end
+  end
+
+  describe 'delete /users' do
+    before do
+      @current_user = create(:user, :with_api_key)
+      @headers = {'Access-Token' => @current_user.api_keys.last.access_token}
+    end
+
+    context 'normal' do
+      it 'return 200' do
+        delete '/api/v1/users', headers: @headers
+        expect(response.status).to eq(200)
+      end
+
+      it 'delete correctly' do
+        community1 = create(:community)
+        community2 = create(:community)
+        community3 = create(:community,
+                            :with_cypher)
+
+        community1.hosts << @current_user
+        community2.participants << @current_user
+        community3.followers << @current_user
+        community3.cyphers.first.participants << @current_user
+
+        cypher = create(:cypher,
+                        community: community1,
+                        host: @current_user)
+
+        delete '/api/v1/users', headers: @headers
+        expect(User.find_by(id: @current_user.id)).to be_nil
+        expect(CommunityHost.where(host_id: @current_user.id)).to be_empty
+        expect(CommunityFollower.where(follower_id: @current_user.id)).to be_empty
+        expect(Cypher.where(host_id: @current_user.id)).to be_empty
+        expect(CypherParticipant.where(participant_id:  @current_user.id)).to be_empty
+        expect(ApiKey.where(user_id: @current_user)).to be_empty
       end
     end
   end

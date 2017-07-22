@@ -11,11 +11,11 @@ RSpec.describe "Communities", type: :request do
                         :with_tag)
 
     @past_cyphers = @community.cyphers.
-                                where('cypher_from < ?', Date.today.to_datetime).
-                                order(cypher_from: :desc).all
+        where('cypher_from < ?', Date.today.to_datetime).
+        order(cypher_from: :desc).all
     @future_cyphers = @community.cyphers.
-                                  where('cypher_from >= ?', Date.today.to_datetime).
-                                  order(:cypher_from).all
+        where('cypher_from >= ?', Date.today.to_datetime).
+        order(:cypher_from).all
     @current_user = create(:user, :with_api_key)
     @headers = {'Access-Token' => @current_user.api_keys.last.access_token}
   end
@@ -26,7 +26,6 @@ RSpec.describe "Communities", type: :request do
       expect(response.status).to eq(200)
     end
   end
-  # TODO regular_cypher 変更
   describe 'response of community' do
     it 'matches the data-type pattern' do
       pattern = {
@@ -47,10 +46,10 @@ RSpec.describe "Communities", type: :request do
               hosts:            Array,
               members:          Array,
               regular_cypher: {
-                      place:              String,
-                      cypher_day:         Integer,
-                      cypher_from:        String,
-                      cypher_to:          String
+                  place:              String,
+                  cypher_day:         Integer,
+                  cypher_from:        String,
+                  cypher_to:          String
               },
               past_cyphers:     Array,
               future_cyphers:   Array
@@ -59,7 +58,6 @@ RSpec.describe "Communities", type: :request do
       get "/api/v1/communities/#{@community.id}", headers: @headers
       expect(response.body).to match_json_expression(pattern)
     end
-    # TODO regular_cypher 変更
     it 'matches the data-content pattern' do
       pattern = {
           community: {
@@ -71,59 +69,35 @@ RSpec.describe "Communities", type: :request do
               facebook_account: @community.facebook_account,
               thumbnail_url:    @community.thumbnail.url,
               tags: [
-                  {
-                      id:           @community.tags[0].id,
-                      content:      @community.tags[0].content
-                  },
-                  {
-                      id:           @community.tags[1].id,
-                      content:      @community.tags[1].content
-                  },
-                  {
-                      id:           @community.tags[2].id,
-                      content:      @community.tags[2].content
-                  }
+                  {id:          @community.tags[0].id,
+                   content:     @community.tags[0].content},
+                  {id:          @community.tags[1].id,
+                   content:     @community.tags[1].content},
+                  {id:          @community.tags[2].id,
+                   content:     @community.tags[2].content}
               ].unordered!,
               hosts: [
-                  {
-                      id:                             @community.hosts.first.id,
-                  }.ignore_extra_keys!
+                  {id: @community.hosts.first.id}.ignore_extra_keys!
               ].ignore_extra_values!,
               members: [
-                  {
-                      id:                             @community.participants[0].id,
-                  }.ignore_extra_keys!,
-                  {
-                      id:                             @community.participants[1].id,
-                  }.ignore_extra_keys!,
-                  {
-                      id:                             @community.participants[2].id,
-                  }.ignore_extra_keys!
+                  {id: @community.participants[0].id}.ignore_extra_keys!,
+                  {id: @community.participants[1].id}.ignore_extra_keys!,
+                  {id: @community.participants[2].id}.ignore_extra_keys!
               ].unordered!,
               regular_cypher: {
-                  place:              @community.regular_cypher.place,
-                  cypher_day:         @community.regular_cypher.cypher_day,
-                  cypher_from:        @community.regular_cypher.cypher_from,
-                  cypher_to:          @community.regular_cypher.cypher_to
+                  place:       @community.regular_cypher.place,
+                  cypher_day:  @community.regular_cypher.cypher_day,
+                  cypher_from: @community.regular_cypher.cypher_from,
+                  cypher_to:   @community.regular_cypher.cypher_to
               },
               past_cyphers: [
-                  {
-                      id:                 @past_cyphers[0].id,
-                  }.ignore_extra_keys!,
-                  {
-                      id:                 @past_cyphers[1].id,
-                  }.ignore_extra_keys!
+                  {id: @past_cyphers[0].id}.ignore_extra_keys!,
+                  {id: @past_cyphers[1].id}.ignore_extra_keys!
               ].ordered!,
               future_cyphers: [
-                  {
-                      id:                 @future_cyphers[0].id,
-                  }.ignore_extra_keys!,
-                  {
-                      id:                 @future_cyphers[1].id,
-                  }.ignore_extra_keys!,
-                  {
-                      id:                 @future_cyphers[2].id,
-                  }.ignore_extra_keys!
+                  {id: @future_cyphers[0].id}.ignore_extra_keys!,
+                  {id: @future_cyphers[1].id}.ignore_extra_keys!,
+                  {id: @future_cyphers[2].id}.ignore_extra_keys!
               ].ordered!
           }
       }
@@ -171,11 +145,10 @@ RSpec.describe "Communities", type: :request do
                     id:             Integer,
                     name:           String,
                     thumbnail_url:  String,
-                    next_cyphers:    Array
+                    next_cyphers:   Array
                 }
             ].ignore_extra_values!,
-
-            total:           Integer
+            total: Integer
         }
         @community.participants << @current_user
         get '/api/v1/my_communities?since_id=0', headers: @headers
@@ -208,20 +181,15 @@ RSpec.describe "Communities", type: :request do
         all_communities = @current_user.participating_communities.
             joins(:community_participants).
             includes(:community_participants).
-            ordering{|community| [community.community_participants.created_at.desc, community.id.asc]}
+            ordering{|community| [community.community_participants.created_at.desc,
+                                  community.id.asc]}
         pattern = {
             communities: [
-                {
-                    id:     all_communities[0].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[1].id
-                }.ignore_extra_keys!,
-                {
-                    id:     all_communities[2].id
-                }.ignore_extra_keys!
+                {id: all_communities[0].id}.ignore_extra_keys!,
+                {id: all_communities[1].id}.ignore_extra_keys!,
+                {id: all_communities[2].id}.ignore_extra_keys!
             ],
-            total:        all_communities.count
+            total:   all_communities.count
         }
         get '/api/v1/my_communities?since_id=1', headers: @headers
         expect(response.body).to match_json_expression(pattern)
@@ -233,9 +201,9 @@ RSpec.describe "Communities", type: :request do
           community.participants << @current_user
         end
         all_communities = @current_user.participating_communities.
-                                        joins(:community_participants).
-                                        includes(:community_participants).
-                                        order("communities.id ASC")
+            joins(:community_participants).
+            includes(:community_participants).
+            order("communities.id ASC")
         pattern1 = {
             communities: [
                 {id:     all_communities[0].id}.ignore_extra_keys!,
@@ -340,8 +308,8 @@ RSpec.describe "Communities", type: :request do
       end
 
       it 'matches data-content pattern' do
-      @community.hosts << @current_user
-      get '/api/v1/hosting_communities?since_id=0', headers: @headers
+        @community.hosts << @current_user
+        get '/api/v1/hosting_communities?since_id=0', headers: @headers
         pattern = {
             communities: [
                 {
@@ -363,9 +331,9 @@ RSpec.describe "Communities", type: :request do
           community.hosts << @current_user
         end
         all_communities = @current_user.hosting_communities.
-                                        joins(:community_hosts).
-                                        includes(:community_hosts).
-                                        order("communities.id ASC")
+            joins(:community_hosts).
+            includes(:community_hosts).
+            order("communities.id ASC")
         pattern = {
             communities: [
                 {id:     all_communities[0].id}.ignore_extra_keys!,
@@ -384,7 +352,7 @@ RSpec.describe "Communities", type: :request do
           community.hosts << @current_user
         end
         all_communities = @current_user.hosting_communities.
-                                        order("communities.id ASC")
+            order("communities.id ASC")
 
         pattern1 = {
             communities: [
@@ -504,9 +472,9 @@ RSpec.describe "Communities", type: :request do
           community.followers << @current_user
         end
         all_communities = @current_user.following_communities.
-                                        joins(:community_followers).
-                                        includes(:community_followers).
-                                        order("communities.id ASC")
+            joins(:community_followers).
+            includes(:community_followers).
+            order("communities.id ASC")
         pattern = {
             communities: [
                 {id:     all_communities[0].id}.ignore_extra_keys!,
@@ -525,9 +493,9 @@ RSpec.describe "Communities", type: :request do
           community.followers << @current_user
         end
         all_communities = @current_user.following_communities.
-                                        joins(:community_followers).
-                                        includes(:community_followers).
-                                        order("communities.id ASC")
+            joins(:community_followers).
+            includes(:community_followers).
+            order("communities.id ASC")
 
         pattern1 = {
             communities: [
@@ -595,6 +563,305 @@ RSpec.describe "Communities", type: :request do
           get '/api/v1/following_communities?since_id=a', headers: @headers
           expect(response.status).to eq(400)
         end
+      end
+    end
+  end
+
+  describe 'post /communities' do
+    before do
+      @current_user = create(:user, :with_api_key)
+      @headers = {'Access-Token' => @current_user.api_keys.last.access_token,
+                  'CONTENT_TYPE' => 'application/json'}
+      @statuses = {name:"AAA",
+                   home:"BBB",
+                   bio: "CCC",
+                   thumbnail: "https://1.bp.blogspot.com/-GqgqXly7B7E/WJmxcNC2s7I/AAAAAAABBmc/8gC8azTAg8Ioxsi8JFqx1s6NY6A8B3UyACLcB/s400/ufo_ushi.png",
+                   twitter_account:"aaa"}
+    end
+
+    context 'normal' do
+      it 'return 201' do
+        post "/api/v1/communities",
+             params: @statuses.to_json,
+             headers: @headers
+        expect(response.status).to eq(201)
+      end
+
+      it 'create a community correctly' do
+        Community.delete_all
+        post "/api/v1/communities",
+             params: @statuses.to_json,
+             headers: @headers
+        community = Community.last
+        expect(community.name).to eq(@statuses[:name])
+        expect(community.home).to eq(@statuses[:home])
+        expect(community.bio).to eq(@statuses[:bio])
+        expect(community.thumbnail.url).to eq("/uploads/community/#{community.id}/ufo_ushi.png")
+        expect(community.twitter_account).to eq(@statuses[:twitter_account])
+        expect(community.hosts.last).to eq(@current_user)
+      end
+    end
+
+    context 'abnormal' do
+      it 'return 400' do
+        @statuses.delete(:name)
+        post "/api/v1/communities",
+             params: @statuses.to_json,
+             headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 400' do
+        @statuses.delete(:home)
+        post "/api/v1/communities",
+             params: @statuses.to_json,
+             headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 400' do
+        @statuses.delete(:bio)
+        post "/api/v1/communities",
+             params: @statuses.to_json,
+             headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 400' do
+        post "/api/v1/communities",
+             params: @statuses.to_json,
+             headers: @headers
+        post "/api/v1/communities",
+             params: @statuses.to_json,
+             headers: @headers
+        expect(response.status).to eq(400)
+      end
+    end
+  end
+
+  describe 'put /communities/:id' do
+    before do
+      @current_user = create(:user, :with_api_key)
+      @headers = {'Access-Token' => @current_user.api_keys.last.access_token,
+                  'CONTENT_TYPE' => 'application/json'}
+      @statuses = {name:"AAA",
+                   home:"BBB",
+                   bio: "CCC",
+                   thumbnail: "https://4.bp.blogspot.com/-Mo-qNLoznb0/WVn-Jb7jfpI/AAAAAAABFPI/vv9ic7N7KRoiFPlZzI_YZZ3BsZOSZzF5wCLcBGAs/s400/bug_seakagokegumo.png",
+                   twitter_account:"aaa"}
+
+    end
+
+    context 'normal' do
+      it 'update correctly' do
+        Community.delete_all
+        community = create(:community)
+        @current_user.hosting_communities << community
+        put "/api/v1/communities/#{community.id}",
+            params: @statuses.to_json,
+            headers: @headers
+        expect(@current_user.hosting_communities.last.name).to eq(@statuses[:name])
+        expect(@current_user.hosting_communities.last.home).to eq(@statuses[:home])
+        expect(@current_user.hosting_communities.last.bio).to eq(@statuses[:bio])
+        expect(@current_user.hosting_communities.last.twitter_account).to eq(@statuses[:twitter_account])
+        # TODO 画像の更新は後回し
+        #expect(@current_user.hosting_communities.last.thumbnail.url).to eq("/uploads/community/#{@current_user.hosting_communities.last.id}/bug_seakagokegumo.png")
+      end
+    end
+
+    context 'abnormal' do
+      it 'return 400' do
+        Community.delete_all
+        community = create(:community)
+        @current_user.hosting_communities << community
+        @statuses.delete(:name)
+        put "/api/v1/communities/#{community.id}",
+            params: @statuses.to_json,
+            headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 400' do
+        Community.delete_all
+        community = create(:community)
+        @current_user.hosting_communities << community
+        @statuses.delete(:home)
+        put "/api/v1/communities/#{community.id}",
+            params: @statuses.to_json,
+            headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 400' do
+        Community.delete_all
+        community = create(:community)
+        @current_user.hosting_communities << community
+        @statuses.delete(:bio)
+        put "/api/v1/communities/#{community.id}",
+            params: @statuses.to_json,
+            headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 409' do
+        Community.delete_all
+        community = create(:community)
+        @current_user.hosting_communities << community
+        community2 = create(:community)
+        put "/api/v1/communities/#{community2.id}",
+            params: @statuses.to_json,
+            headers: @headers
+        expect(response.status).to eq(409)
+      end
+    end
+  end
+
+  describe 'delete /:id' do
+    before do
+      @current_user = create(:user, :with_api_key)
+      @headers = {'Access-Token' => @current_user.api_keys.last.access_token,
+                  'CONTENT_TYPE' => 'application/json'}
+      @community = create(:community,
+                          :with_participant,
+                          :with_follower,
+                          :with_cypher,
+                          :with_regular_cypher,
+                          :with_tag
+      )
+      @community.hosts << @current_user
+    end
+    context 'normal' do
+      it 'return 200' do
+        delete "/api/v1/communities/#{@community.id}", headers: @headers
+        expect(response.status).to eq(200)
+      end
+
+      it 'delete correctly' do
+        delete "/api/v1/communities/#{@community.id}", headers: @headers
+        expect(@current_user.hosting_communities).to be_empty
+        expect(CommunityHost.where(community_id: @community.id)).to be_empty
+        expect(CommunityParticipant.where(community_id: @community.id)).to be_empty
+        expect(CommunityFollower.where(community_id: @community.id)).to be_empty
+        expect(Cypher.where(community_id: @community.id)).to be_empty
+        expect(CommunityTag.where(community_id: @community.id)).to be_empty
+        expect(RegularCypher.where(community_id: @community.id)).to be_empty
+      end
+    end
+    context 'abnormal' do
+      it 'return 400' do
+        delete "/api/v1/communities/a", headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 409' do
+        Community.delete_all
+        community = create(:community)
+        @current_user.hosting_communities << community
+        community2 = create(:community)
+        delete "/api/v1/communities/#{community2.id}", headers: @headers
+        expect(response.status).to eq(409)
+      end
+    end
+  end
+
+  describe 'post /communities/:id/cyphers' do
+    before do
+      @community = create(:community)
+      @current_user = create(:user, :with_api_key)
+      @community.hosts << @current_user
+      @headers = {'Access-Token' => @current_user.api_keys.last.access_token,
+                  'CONTENT_TYPE' => 'application/json'}
+      @statuses = {
+          name: "AAA",
+          info: "BBB",
+          cypher_from: ((Date.today + 5).to_datetime).to_s(:default),
+          cypher_to: ((Date.today + 5).to_datetime + Rational(2,24)).to_s(:default),
+          place: "CCC",
+          capacity: 10
+      }
+    end
+    context 'normal' do
+      it 'return 201' do
+        post "/api/v1/communities/#{@community.id}/cyphers",
+             params: @statuses.to_json,
+             headers: @headers
+        expect(response.status).to eq(201)
+      end
+
+      it 'create correctly' do
+        post "/api/v1/communities/#{@community.id}/cyphers",
+             params: @statuses.to_json,
+             headers: @headers
+        expect(@community.cyphers.first.name).to eq(@statuses[:name])
+        expect(@community.cyphers.first.info).to eq(@statuses[:info])
+        expect(@community.cyphers.first.cypher_from).to eq(@statuses[:cypher_from])
+        expect(@community.cyphers.first.cypher_to).to eq(@statuses[:cypher_to])
+        expect(@community.cyphers.first.place).to eq(@statuses[:place])
+        expect(@community.cyphers.first.capacity).to eq(@statuses[:capacity])
+        expect(@community.cyphers.first.serial_num).to eq(1)
+        expect(@community.cyphers.first.host_id).to eq(@current_user.id)
+      end
+
+      it 'serial_num increment correctly' do
+        cypher = create(:cypher,
+                        host: @current_user,
+                        community: @community)
+        @statuses[:name] = cypher.name
+        post "/api/v1/communities/#{@community.id}/cyphers",
+             params: @statuses.to_json,
+             headers: @headers
+        expect(@community.cyphers.last.serial_num).to eq(2)
+      end
+    end
+
+    context 'abnormal' do
+      it 'return 400' do
+        @statuses.delete(:name)
+        post "/api/v1/communities/#{@community.id}/cyphers",
+             params: @statuses.to_json,
+             headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 400' do
+        @statuses.delete(:info)
+        post "/api/v1/communities/#{@community.id}/cyphers",
+             params: @statuses.to_json,
+             headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 400' do
+        @statuses.delete(:cypher_from)
+        post "/api/v1/communities/#{@community.id}/cyphers",
+             params: @statuses.to_json,
+             headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 400' do
+        @statuses.delete(:cypher_to)
+        post "/api/v1/communities/#{@community.id}/cyphers",
+             params: @statuses.to_json,
+             headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 400' do
+        @statuses.delete(:place)
+        post "/api/v1/communities/#{@community.id}/cyphers",
+             params: @statuses.to_json,
+             headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 409' do
+        temp_community = create(:community)
+        post "/api/v1/communities/#{temp_community.id}/cyphers",
+             params: @statuses.to_json,
+             headers: @headers
+        expect(response.status).to eq(409)
+
       end
     end
   end

@@ -10,24 +10,15 @@ describe CypherParticipant do
     context 'of index' do
       it 'should not have two records whith have the same combination of cypher_id and participant_id' do
         expect do
-          community = Community.create(name: "aaaa", home: "aaaa", bio: "aaaa")
-          host = User.create(name: "aaaa", home: "aaaa", bio: "aaaa", type_flag:1)
+          community = create(:community)
+          host = create(:host)
           community.hosts << host
-          community.save
-          cypher = Cypher.new(name: "aaaa",
-                              serial_num:1,
-                              info:"aaaa",
-                              cypher_from:DateTime.now(),
-                              cypher_to:DateTime.now(),
-                              place:"aaaa")
-          cypher.community = community
-          cypher.host = host
-          cypher.save
+          community.save!
+          cypher = create(:cypher,
+                          community: community,
+                          host: host)
 
-          participant = User.create(name: "bbbb",
-                                    home: "bbbb",
-                                    bio: "bbbb",
-                                    type_flag:1)
+          participant = create(:participant)
           cypher.participants << participant
           cypher.save
 

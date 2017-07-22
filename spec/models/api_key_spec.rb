@@ -9,13 +9,14 @@ RSpec.describe ApiKey, type: :model do
     end
 
     context 'of uniqueness' do
-      it 'should not have the same value in different records of access_token column ' do
+      it 'should not have the same value　in access_token columns in different records' do
         expect do
           user = create(:user, :with_api_key)
           another_api_key = ApiKey.new(firebase_uid: user.api_keys.first.firebase_uid)
           user.api_keys << another_api_key
           another_api_key.save!(validate: false)
-          another_api_key.update_attribute(:access_token, user.api_keys.first.access_token)
+          another_api_key.update_attribute(:access_token,
+                                           user.api_keys.first.access_token)
         end.to raise_error( ActiveRecord::RecordNotUnique )
       end
     end

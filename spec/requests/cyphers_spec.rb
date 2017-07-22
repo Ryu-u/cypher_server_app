@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe "Cyphers", type: :request do
   before do
     @cypher = create(:cypher, :with_tag,
-                        community: create(:community),
-                        host: create(:host)
-                     )
+                     community: create(:community),
+                     host: create(:host)
+    )
     @current_user = create(:user, :with_api_key)
     @headers = {'Access-Token' => @current_user.api_keys.last.access_token}
   end
@@ -21,24 +21,24 @@ RSpec.describe "Cyphers", type: :request do
       it 'matches data-type pattern' do
         pattern = {
             cypher: {
-                id:                 Integer,
-                name:               String,
-                serial_num:         Integer,
-                thumbnail_url:      String,
-                cypher_from:        String,
-                cypher_to:          String,
-                place:              String,
-                info:               String,
-                capacity:           Integer,
-                host:               Hash,
-                community:          Hash,
-                tags:               [
-                                      {
-                                          id:       Integer,
-                                          content:  String
-                                      }
+                id:            Integer,
+                name:          String,
+                serial_num:    Integer,
+                thumbnail_url: String,
+                cypher_from:   String,
+                cypher_to:     String,
+                place:         String,
+                info:          String,
+                capacity:      Integer,
+                host:          Hash,
+                community:     Hash,
+                tags: [
+                    {
+                        id:       Integer,
+                        content:  String
+                    }
                 ].ignore_extra_values!,
-                }
+            }
         }
         get "/api/v1/cyphers/#{@cypher.id}", headers: @headers
         expect(response.body).to match_json_expression(pattern)
@@ -56,25 +56,15 @@ RSpec.describe "Cyphers", type: :request do
                 place:              @cypher.place,
                 info:               @cypher.info,
                 capacity:           @cypher.capacity,
-                host:               {
-                                        id: @cypher.host.id
-                }.ignore_extra_keys!,
-                community:          {
-                                        id: @cypher.community.id
-                }.ignore_extra_keys!,
+                host: {id: @cypher.host.id}.ignore_extra_keys!,
+                community: {id: @cypher.community.id}.ignore_extra_keys!,
                 tags:               [
-                                      {
-                                          id:       @cypher.tags[0].id,
-                                          content:  @cypher.tags[0].content,
-                                      },
-                                      {
-                                          id:       @cypher.tags[1].id,
-                                          content:  @cypher.tags[1].content,
-                                      },
-                                      {
-                                          id:       @cypher.tags[2].id,
-                                          content:  @cypher.tags[2].content,
-                                      }
+                    {id:       @cypher.tags[0].id,
+                     content:  @cypher.tags[0].content},
+                    {id:       @cypher.tags[1].id,
+                     content:  @cypher.tags[1].content},
+                    {id:       @cypher.tags[2].id,
+                     content:  @cypher.tags[2].content}
                 ].unordered!,
             }
         }
@@ -136,7 +126,7 @@ RSpec.describe "Cyphers", type: :request do
                     thumbnail_url:  String
                 }
             ],
-            total:                  Integer
+            total: Integer
         }
         get '/api/v1/participating_cyphers?since_id=0&cypher_from=', headers: @headers
         expect(response.body).to match_json_expression(pattern)
@@ -165,6 +155,13 @@ RSpec.describe "Cyphers", type: :request do
       it 'paginates correctly', skip_before: true do
         here_user = create(:user, :with_api_key)
         @headers = {'Access-Token' => here_user.api_keys.last.access_token}
+        # 開始時刻順に並べたサイファーid
+        # 101-117(開始時刻：現在時刻+101～+117)
+        # 119(開始時刻：現在時刻+119)
+        # 120-122(開始時刻：現在時刻+120、開始時刻が同一でidだけ増える)←ここでページネート発生
+        # 118((開始時刻：現在時刻+122))
+        # 123-125(開始時刻：現在時刻+123～+125)
+
         for i in 101..119 do
           if i == 118
             next
@@ -177,6 +174,7 @@ RSpec.describe "Cyphers", type: :request do
                      host: create(:host))
           here_user.participating_cyphers << c
         end
+
         c_118 = create(:cypher,
                        id: 118,
                        cypher_from: DateTime.now.to_date + 122,
@@ -205,8 +203,8 @@ RSpec.describe "Cyphers", type: :request do
         end
 
         all_cyphers = here_user.
-                        participating_cyphers.
-                        ordering{|cypher| [cypher.cypher_from.asc, cypher.id.asc]}
+            participating_cyphers.
+            ordering{|cypher| [cypher.cypher_from.asc, cypher.id.asc]}
 
 
         pattern1 = {
@@ -248,7 +246,8 @@ RSpec.describe "Cyphers", type: :request do
         get '/api/v1/participating_cyphers?since_id=0&cypher_from=', headers: @headers
         expect(response.body).to match_json_expression(pattern1)
 
-        get "/api/v1/participating_cyphers?since_id=#{all_cyphers[19].id}&cypher_from=#{all_cyphers[19].cypher_from.to_s(:default)}", headers: @headers
+        get "/api/v1/participating_cyphers?since_id=#{all_cyphers[19].id}&cypher_from=#{all_cyphers[19].cypher_from.to_s(:default)}",
+            headers: @headers
         expect(response.body).to match_json_expression(pattern2)
       end
 
@@ -258,7 +257,8 @@ RSpec.describe "Cyphers", type: :request do
             cyphers: [],
             total:   0
         }
-        get '/api/v1/participating_cyphers?since_id=0&cypher_from=', headers: {'Access-Token' => user.api_keys.last.access_token}
+        get '/api/v1/participating_cyphers?since_id=0&cypher_from=',
+            headers: {'Access-Token' => user.api_keys.last.access_token}
         expect(response.body).to match_json_expression(pattern)
       end
     end
@@ -266,28 +266,32 @@ RSpec.describe "Cyphers", type: :request do
     context 'abnormal' do
       describe 'miss since_id' do
         it 'return 400' do
-          get '/api/v1/participating_cyphers?cypher_from=', headers: @headers
+          get '/api/v1/participating_cyphers?cypher_from=',
+              headers: @headers
           expect(response.status).to eq(400)
         end
       end
 
       describe 'miss cypher_from' do
         it 'return 400' do
-          get '/api/v1/participating_cyphers?since_id=0', headers: @headers
+          get '/api/v1/participating_cyphers?since_id=0',
+              headers: @headers
           expect(response.status).to eq(400)
         end
       end
 
       describe 'wrong type of since_id' do
         it 'return 400' do
-          get '/api/v1/participating_cyphers?since_id="a"&cypher_from=', headers: @headers
+          get '/api/v1/participating_cyphers?since_id="a"&cypher_from=',
+              headers: @headers
           expect(response.status).to eq(400)
         end
       end
 
       describe 'wrong type of cypher_from' do
         it 'return 400' do
-          get '/api/v1/participating_cyphers?since_id=0&cypher_from=99', headers: @headers
+          get '/api/v1/participating_cyphers?since_id=0&cypher_from=99',
+              headers: @headers
           expect(response.status).to eq(400)
         end
       end
@@ -398,8 +402,8 @@ RSpec.describe "Cyphers", type: :request do
         end
 
         all_cyphers = here_user.
-                          hosting_cyphers.
-                          ordering{|cypher| [cypher.cypher_from.asc, cypher.id.asc]}
+            hosting_cyphers.
+            ordering{|cypher| [cypher.cypher_from.asc, cypher.id.asc]}
 
 
         pattern1 = {
@@ -441,7 +445,8 @@ RSpec.describe "Cyphers", type: :request do
         get '/api/v1/hosting_cyphers?since_id=0&cypher_from=', headers: @headers
         expect(response.body).to match_json_expression(pattern1)
 
-        get "/api/v1/hosting_cyphers?since_id=#{all_cyphers[19].id}&cypher_from=#{all_cyphers[19].cypher_from.to_s(:default)}", headers: @headers
+        get "/api/v1/hosting_cyphers?since_id=#{all_cyphers[19].id}&cypher_from=#{all_cyphers[19].cypher_from.to_s(:default)}",
+            headers: @headers
         expect(response.body).to match_json_expression(pattern2)
       end
 
@@ -499,7 +504,7 @@ RSpec.describe "Cyphers", type: :request do
                          cypher_to:   (DateTime.now + 10 ) + Rational(2,24),
                          community: create(:community),
                          host: create(:user)
-                        )
+        )
       end
     end
     context 'normal' do
@@ -542,7 +547,7 @@ RSpec.describe "Cyphers", type: :request do
                      cypher_to:   (DateTime.now.to_date + i ) + Rational(2,24),
                      community: create(:community),
                      host: create(:host)
-                    )
+          )
         end
         c_118 = create(:cypher,
                        id: 118,
@@ -550,7 +555,7 @@ RSpec.describe "Cyphers", type: :request do
                        cypher_to:   (DateTime.now.to_date + 122 ) + Rational(2,24),
                        community: create(:community),
                        host: create(:host)
-                      )
+        )
         for i in 120..122 do
           c = create(:cypher,
                      id: i,
@@ -558,7 +563,7 @@ RSpec.describe "Cyphers", type: :request do
                      cypher_to:   (DateTime.now.to_date + 120 ) + Rational(2,24),
                      community: create(:community),
                      host: create(:host)
-                    )
+          )
         end
 
         for i in 123..125 do
@@ -571,7 +576,7 @@ RSpec.describe "Cyphers", type: :request do
         end
 
         all_cyphers = Cypher.
-                        ordering{|cypher| [cypher.cypher_from.asc, cypher.id.asc]}
+            ordering{|cypher| [cypher.cypher_from.asc, cypher.id.asc]}
 
 
         pattern1 = {
@@ -658,5 +663,130 @@ RSpec.describe "Cyphers", type: :request do
       end
 
     end
+  end
+
+  describe 'put /cyphers/:id' do
+    before do
+      @current_user = create(:user, :with_api_key)
+      @headers = {'Access-Token' => @current_user.api_keys.last.access_token,
+                  'CONTENT_TYPE' => 'application/json'}
+      @cypher = create(:cypher,
+                       community: create(:community),
+                       host: @current_user)
+      @statuses = {
+          name: "AAA",
+          info: "BBB",
+          cypher_from: ((Date.today + 5).to_datetime).
+              to_s(:default),
+          cypher_to: ((Date.today + 5).to_datetime + Rational(2,24)).
+              to_s(:default),
+          place: "CCC",
+          capacity: 20
+      }
+    end
+    context 'normal' do
+      it 'return 200' do
+        put "/api/v1/cyphers/#{@cypher.id}",
+            params: @statuses.to_json,
+            headers: @headers
+        expect(response.status).to eq(200)
+      end
+
+      it 'update correctly' do
+        put "/api/v1/cyphers/#{@cypher.id}",
+            params: @statuses.to_json,
+            headers: @headers
+        expect(Cypher.find(@cypher.id).name).to eq(@statuses[:name])
+        expect(Cypher.find(@cypher.id).info).to eq(@statuses[:info])
+        expect(Cypher.find(@cypher.id).cypher_from).
+            to eq(@statuses[:cypher_from])
+        expect(Cypher.find(@cypher.id).cypher_to).
+            to eq(@statuses[:cypher_to])
+        expect(Cypher.find(@cypher.id).place).to eq(@statuses[:place])
+        expect(Cypher.find(@cypher.id).capacity).to eq(@statuses[:capacity])
+      end
+    end
+
+    context 'abnormal' do
+      it 'return 400' do
+        put "/api/v1/cyphers/a",
+            params: @statuses.to_json,
+            headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 400' do
+        @statuses.delete(:name)
+        put "/api/v1/cyphers/#{@cypher.id}",
+            params: @statuses.to_json,
+            headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 404' do
+        @cypher.destroy
+        put "/api/v1/cyphers/#{@cypher.id}",
+            params: @statuses.to_json,
+            headers: @headers
+        expect(response.status).to eq(404)
+      end
+
+      it 'return 409' do
+        cypher = create(:cypher,
+                        community: create(:community),
+                        host: create(:user))
+        put "/api/v1/cyphers/#{cypher.id}",
+            params: @statuses.to_json,
+            headers: @headers
+        expect(response.status).to eq(409)
+      end
+    end
+  end
+
+  describe 'delete /cyphers/:id' do
+    before do
+      @current_user = create(:user, :with_api_key)
+      @headers = {'Access-Token' => @current_user.api_keys.last.access_token}
+      @cypher = create(:cypher,
+                       community: create(:community),
+                       host: @current_user)
+      @cypher.participants << create(:user)
+      @cypher.tags << create(:tag)
+    end
+    context 'normal' do
+      it 'return 200' do
+        delete "/api/v1/cyphers/#{@cypher.id}", headers: @headers
+        expect(response.status).to eq(200)
+      end
+
+      it 'delete  correctly' do
+        delete "/api/v1/cyphers/#{@cypher.id}", headers: @headers
+        expect(Cypher.find_by(id: @cypher.id)).to be_nil
+        expect(CypherParticipant.where(cypher_id: @cypher.id)).to be_empty
+        expect(CypherTag.where(cypher_id: @cypher.id)).to be_empty
+      end
+    end
+
+    context 'abnormal' do
+      it 'return 400' do
+        delete "/api/v1/cyphers/a", headers: @headers
+        expect(response.status).to eq(400)
+      end
+
+      it 'return 404' do
+        @cypher.destroy
+        delete "/api/v1/cyphers/#{@cypher.id}", headers: @headers
+        expect(response.status).to eq(404)
+      end
+
+      it 'return 409' do
+        cypher = create(:cypher,
+                        community: create(:community),
+                        host: create(:user))
+        delete "/api/v1/cyphers/#{cypher.id}", headers: @headers
+        expect(response.status).to eq(409)
+      end
+    end
+
   end
 end

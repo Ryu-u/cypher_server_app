@@ -9,9 +9,9 @@ describe Community do
     end
 
     context 'of uniqueness' do
-      it 'should not have the same value in different records of name column ' do
+      it 'should not have the same value of name column in different records' do
         expect do
-          existing_community = Community.create(name:"AAAA", home:"AAAA", bio:"AAAA")
+          existing_community = create(:community)
           new_community = build(:community)
           new_community.name = existing_community.name
           new_community.save!(validate: false)
