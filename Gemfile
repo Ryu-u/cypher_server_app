@@ -45,6 +45,10 @@ gem 'hashie'
 gem 'grape'
 gem 'grape-jbuilder'
 
+gem 'slim'
+# TODO あとでmysql化
+#gem 'mysql2'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
@@ -69,6 +73,10 @@ group :development do
   gem 'pry-doc'
   gem 'pry-byebug'
   gem 'pry-stack_explorer'
+
+  # TODO あとで入れる
+  #gem 'rubocop'
+  #gem 'rufo'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
