@@ -45,7 +45,11 @@ gem 'hashie'
 gem 'grape'
 gem 'grape-jbuilder'
 
-gem 'slim'
+gem 'slim-rails'
+
+gem 'omniauth-twitter', :github => 'arunagw/omniauth-twitter'
+gem 'figaro'
+
 # TODO あとでmysql化
 #gem 'mysql2'
 
@@ -54,6 +58,9 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+
+  gem 'coffee-script-source', '1.8.0'
+
 end
 group :test do
   gem 'faker'

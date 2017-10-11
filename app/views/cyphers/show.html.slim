@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    meta charset='utf-8'
+    title サイファー詳細
+  body
+    h1 サイファー詳細
+    table
+      tr
+        th サイファー名
+        td #{@cypher.name}
+      tr
+        th 日時
+        td #{@cypher.cypher_from.format(:default)} ～ #{@cypher.cypher_to.format(:default)}
+      tr
+        th 開催地
+        td #{@cypher.place}
+      tr
+        th 説明
+        td #{@cypher.info}
+
+

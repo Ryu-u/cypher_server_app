@@ -1,0 +1,17 @@
+doctype html
+html
+  head
+    meta charset='utf-8'
+    title ユーザー詳細
+  body
+    h1 ユーザー詳細
+    table
+      tr
+        th ユーザー名
+        td #{@user.name}
+      tr
+        th 活動拠点
+        td #{@user.home}
+      tr
+        th 紹介
+        td #{@user.bio}

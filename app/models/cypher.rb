@@ -1,4 +1,5 @@
 class Cypher < ApplicationRecord
+  # TODO beforeで同じ名前のサイファーのserial_numをインクリメント
   belongs_to :community
   belongs_to :host, class_name: 'User',
              foreign_key: 'host_id'

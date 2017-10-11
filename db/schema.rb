@@ -15,13 +15,13 @@ ActiveRecord::Schema.define(version: 20170620070735) do
   create_table "api_keys", force: :cascade do |t|
     t.integer  "user_id",      null: false
     t.string   "access_token", null: false
-    t.string   "firebase_uid", null: false
+    t.string   "twitter_uid",  null: false
     t.datetime "expires_at"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.index ["access_token"], name: "index_api_keys_on_access_token", unique: true
-    t.index ["firebase_uid"], name: "index_api_keys_on_firebase_uid"
-    t.index ["user_id"], name: "index_api_keys_on_user_id"
+    t.index ["twitter_uid"], name: "index_api_keys_on_twitter_uid", unique: true
+    t.index ["user_id"], name: "index_api_keys_on_user_id", unique: true
   end
 
   create_table "communities", force: :cascade do |t|
@@ -128,8 +128,8 @@ ActiveRecord::Schema.define(version: 20170620070735) do
 
   create_table "users", force: :cascade do |t|
     t.string   "name",                         null: false
-    t.string   "home",                         null: false
-    t.text     "bio",                          null: false
+    t.string   "home"
+    t.text     "bio"
     t.integer  "type_flag",        default: 0, null: false
     t.string   "twitter_account"
     t.string   "facebook_account"

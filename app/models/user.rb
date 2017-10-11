@@ -34,12 +34,10 @@ class User < ApplicationRecord
 
   has_many :posts
 
-  has_many :api_keys,
+  has_one :api_key,
            dependent: :destroy
 
   validates :name, presence: true
-  validates :home, presence: true
-  validates :bio, presence: true
   validates :type_flag, presence: true
 
   include FlagShihTzu
