@@ -15,6 +15,4 @@ module GeneralHelper
       false
     end
   end
-
-
 end
