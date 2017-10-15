@@ -2,7 +2,6 @@ class CommunitiesController < ApplicationController
   include GeneralHelper
 
   def show
-    # TODO 認証は後で
     authenticate!
     @community = Community.find(params[:id])
     @past_cyphers = @community.cyphers.
@@ -78,27 +77,35 @@ class CommunitiesController < ApplicationController
 
   def edit
     authenticate!
-    # TODO ホストかどうかチェック
-    @community = Community.find(params[:id])
+    if @current_user.hosting_community?(params[:id])
+      @community = Community.find(params[:id])
+    else
+      redirect_to @community
+    end
   end
 
   def update
     authenticate!
-    # TODO ホストかどうかチェック
-    @community = Community.find(params[:id])
-    if @community.update_attributes(community_params)
-      redirect_to @community
+    if @current_user.hosting_community?(params[:id])
+      @community = Community.find(params[:id])
+      if @community.update_attributes(community_params)
+        redirect_to @community
+      else
+        render 'edit'
+      end
     else
-      render 'edit'
+      redirect_to @community
     end
   end
 
   def destroy
     authenticate!
-    # TODO ホストかどうかチェック
-    @community = Community.find(params[:id])
-    if @community.destroy!
-      redirect_to '/'
+    if @current_user.hosting_community?(params[:id])
+      @community = Community.find(params[:id])
+      if @community.destroy!
+        redirect_to '/'
+        # 成功メッセージ
+      end
     else
       # TODO 失敗メッセージ
     end
