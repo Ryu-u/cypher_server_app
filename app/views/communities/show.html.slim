@@ -4,6 +4,7 @@ html
     meta charset='utf-8'
     title コミュニティ詳細
   body
+    = render partial: "common/header"
     h1 #{@community.name}
     span #{@community.twitter_account}
     ul

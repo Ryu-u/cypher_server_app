@@ -1,0 +1,15 @@
+div id = "header-menu"
+  a id = "link-to-top" href ='/' Cypholic
+  div id='mypage'
+    span id='mypage-list' マイページ
+    ul
+      li: a href='/my_cyphers' 参加サイファー
+      li: a href='/hosting_cyphers' ホストしているサイファー
+      li: a href='/my_communities' 参加コミュニティ
+      li: a href='/following_communities' フォロー中のコミュニティ
+      li: a href='/hosting_communities' ホストしているコミュニティ
+  - if authenticate!
+    =link_to("ログアウト", "/logout", method: :delete)
+  - else
+    =link_to("twitterでログイン", "/auth/twitter", method: :get)
+  div id='signup': a href='/users/new' twitterで登録
