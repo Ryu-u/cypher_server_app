@@ -56,7 +56,6 @@ class UsersController < ApplicationController
 
   def destroy
     authenticate!
-    # TODO ホストかどうかチェック
     if @current_user.destroy!
       reset_session
       cookies.delete :access_token
