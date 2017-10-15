@@ -5,8 +5,8 @@ Rails.application.routes.draw do
 
   get '/auth/twitter/callback' => 'twitter#callback'
 
-  get '/login' => 'sessions#login', format: false
-  post '/login' => 'sessions#create', format: false
+  get '/' => 'cyphers#index'
+  
   delete '/logout' => 'sessions#logout', format: false
 
   resources :users,
