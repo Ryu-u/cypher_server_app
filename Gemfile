@@ -47,6 +47,7 @@ gem 'grape-jbuilder'
 
 gem 'slim-rails'
 gem 'bootstrap-sass'
+gem 'jquery-turbolinks'
 
 gem 'omniauth-twitter', :github => 'arunagw/omniauth-twitter'
 gem 'figaro'
