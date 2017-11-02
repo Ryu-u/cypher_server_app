@@ -34,12 +34,10 @@ class User < ApplicationRecord
 
   has_many :posts
 
-  has_many :api_keys,
+  has_one :api_key,
            dependent: :destroy
 
   validates :name, presence: true
-  validates :home, presence: true
-  validates :bio, presence: true
   validates :type_flag, presence: true
 
   include FlagShihTzu
@@ -68,6 +66,15 @@ class User < ApplicationRecord
       return true
     else
       return false
+    end
+  end
+
+  def already_participating_community?(community_id)
+    community = Community.find(community_id)
+    if !community.participants.find_by(id: self.id).blank?
+      true
+    else
+      false
     end
   end
 end

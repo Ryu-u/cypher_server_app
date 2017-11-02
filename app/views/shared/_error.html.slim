@@ -1,0 +1,7 @@
+- if target.errors.any?
+  #error_explanation
+    .alert.alert-danger
+      = target.errors.count.to_s + '箇所エラーがあります。'
+    ul
+      - target.errors.full_messages.each do |msg|
+        li = msg

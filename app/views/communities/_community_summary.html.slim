@@ -1,0 +1,12 @@
+table
+  tr
+    td #{community.name}
+  tr
+    td
+      - if community.cyphers.where('cypher_from >= ?', Date.today.to_datetime).any?
+        table
+          - community.cyphers.where('cypher_from >= ?', Date.today.to_datetime).order(:cypher_from).each do |cypher|
+            tr
+              td #{cypher.cypher_from.to_s(:default)}
+            tr
+              td #{cypher.name}

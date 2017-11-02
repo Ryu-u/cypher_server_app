@@ -1,0 +1,6 @@
+= provide(:title, '主催しているサイファー')
+table
+  - @cyphers.each do |cypher|
+    tr
+      td
+        = render partial: "cyphers/cypher_summary.html.slim", locals: {cypher: cypher}

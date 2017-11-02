@@ -1,0 +1,26 @@
+nav.navbar.navbar-default.navbar-fixed-top
+  .container-fluid
+    .navbar-header
+      a.navbar-brand id = "link-to-top" href ='/' Cypholic
+      button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#navi'
+        span.sr-only メニュー
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+    #navi.collapse.navbar-collapse
+      ul.nav.navbar-nav.navbar-right
+        li
+          a.dropdown-toggle href='#' data-toggle='dropdown' マイページ
+          ul.dropdown-menu
+            li role='presentation': a href='/my_cyphers' 参加サイファー
+            li role='presentation': a href='/hosting_cyphers' ホストしているサイファー
+            li role='presentation': a href='/my_communities' 参加コミュニティ
+            li role='presentation': a href='/following_communities' フォロー中のコミュニティ
+            li role='presentation': a href='/hosting_communities' ホストしているコミュニティ
+        li
+          - if authenticate!
+            =link_to("ログアウト", "/logout", method: :delete)
+          - else
+            =link_to("twitterでログイン", "/auth/twitter", method: :get)
+        li id='signup': a href='/auth/twitter' twitterで登録
+

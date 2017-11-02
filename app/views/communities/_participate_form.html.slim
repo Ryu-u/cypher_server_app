@@ -1,0 +1,5 @@
+- if !@current_user.hosting_community?(@community.id)
+  - if !@current_user.already_participating_community?(@community)
+    .participate_button.btn.participate 参加する
+  - else
+    .participate_button.btn.participating 参加中

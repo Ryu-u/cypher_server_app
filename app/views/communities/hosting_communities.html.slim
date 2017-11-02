@@ -1,0 +1,6 @@
+= provide :title, 'ホストしているコミュニティ'
+table
+  - @communities.each do |community|
+    tr
+      td
+        = render partial: "communities/community_summary.html.slim", locals: {community: community}
