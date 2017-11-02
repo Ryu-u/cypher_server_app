@@ -1,12 +1,6 @@
-doctype html
-html
-  head
-    meta charset='utf-8'
-    title 主催しているサイファー
-  body
-    h1 主催しているサイファー
-    table
-      - @cyphers.each do |cypher|
-        tr
-          td
-            = render partial: "cyphers/cypher_summary.html.slim", locals: {cypher: cypher}
+= provide(:title, '主催しているサイファー')
+table
+  - @cyphers.each do |cypher|
+    tr
+      td
+        = render partial: "cyphers/cypher_summary.html.slim", locals: {cypher: cypher}

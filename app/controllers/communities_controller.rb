@@ -13,7 +13,7 @@ class CommunitiesController < ApplicationController
   end
 
   def my_communities
-    # TODO 認証は後
+    
     authenticate!
     all_communities = @current_user.
         participating_communities
@@ -30,7 +30,7 @@ class CommunitiesController < ApplicationController
   end
 
   def hosting_communities
-    # TODO 認証は後
+
     authenticate!
     all_communities = @current_user.
         hosting_communities
@@ -44,7 +44,7 @@ class CommunitiesController < ApplicationController
   end
 
   def following_communities
-    # TODO 認証は後
+    
     authenticate!
     all_communities = @current_user.
         following_communities
@@ -67,8 +67,8 @@ class CommunitiesController < ApplicationController
   def create
     authenticate!
     @community = Community.new(community_params)
-    @community.hosts << @current_user
     if @community.save
+      @current_user.hosting_communities << @community
       redirect_to @community
     else
       render 'new'
@@ -77,8 +77,9 @@ class CommunitiesController < ApplicationController
 
   def edit
     authenticate!
-    if @current_user.hosting_community?(params[:id])
-      @community = Community.find(params[:id])
+    @community = Community.find(params[:id])
+    if @current_user.hosting_community?(@community.id)
+      render 'edit'
     else
       redirect_to @community
     end
@@ -108,6 +109,23 @@ class CommunitiesController < ApplicationController
       end
     else
       # TODO 失敗メッセージ
+    end
+  end
+
+  def participate_in
+    if authenticate!
+      community = Community.find(params[:community_id])
+      if @current_user.participating_communities << community
+        status 200
+      else
+        status 400
+      end
+    end
+  end
+
+  def leave
+    if authenticate!
+
     end
   end
 

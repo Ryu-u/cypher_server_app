@@ -1,57 +1,56 @@
-doctype html
-html
-  head
-    meta charset='utf-8'
-    title コミュニティ詳細
-  body
-    = render partial: "common/header"
-    h1 #{@community.name}
-    span #{@community.twitter_account}
-    ul
-      - @community.tags.each do |tag|
-        li #{tag.content}
-    table
-      tr
-        th 説明
-        td #{@community.bio}
-      tr
-        th ホーム
-        td #{@community.home}
-      tr
-        th ホスト
-        - @community.hosts.each do |host|
-          td = link_to "#{host.name}", "/users/#{host.id}"
-      tr
-        th 定期開催サイファー
-        / TODO サイファーリンクまだ
-        - if @community.regular_cypher.nil?
-          td -
-        - else
-          td
-            table
-              tr
-                th 日時
-                td 毎週#{@community.regular_cypher.print_day}曜 #{@community.regular_cypher.cypher_from} ～　#{@community.regular_cypher.cypher_from}
-              tr
-                th 場所
-                td #{@community.regular_cypher.place}
-      tr
-        th メンバー
-        - @community.participants.each do |participant|
-          td #{participant.name}
-      tr
-        th 開催予定サイファー
-        td
-          table
-            - @future_cyphers.each do |cypher|
-              tr
-                th #{cypher.cypher_from.to_s(:default)} ～　
-                td #{cypher.name}
-      tr
-        th 過去のサイファー
-        td
-          table
-            - @past_cyphers.each do |cypher|
-              tr
-                th #{cypher.cypher_from.to_s(:default)} ～　
-                td #{cypher.name}
+= provide :title, @community.name
+span #{@community.twitter_account}
+
+= hidden_field_tag :community_id, @community.id
+= hidden_field_tag :user_id, @current_user.id
+
+#participate_form
+  = render partial: 'participate_form'
+ul
+  - @community.tags.each do |tag|
+    li #{tag.content}
+table
+  tr
+    th 説明
+    td #{@community.bio}
+  tr
+    th ホーム
+    td #{@community.home}
+  tr
+    th ホスト
+    - @community.hosts.each do |host|
+      td = link_to "#{host.name}", "/users/#{host.id}"
+  tr
+    th 定期開催サイファー
+    / TODO サイファーリンクまだ
+    - if @community.regular_cypher.nil?
+      td -
+    - else
+      td
+        table
+          tr
+            th 日時
+            td 毎週#{@community.regular_cypher.print_day}曜 #{@community.regular_cypher.cypher_from} ～　#{@community.regular_cypher.cypher_from}
+          tr
+            th 場所
+            td #{@community.regular_cypher.place}
+  tr
+    th メンバー
+    - @community.participants.each do |participant|
+      td #{participant.name}
+  tr
+    th 開催予定サイファー
+    td
+      table
+        - @future_cyphers.each do |cypher|
+          tr
+            th #{cypher.cypher_from.to_s(:default)} ～　
+            td #{cypher.name}
+  tr
+    th 過去のサイファー
+    td
+      table
+        - @past_cyphers.each do |cypher|
+          tr
+            th #{cypher.cypher_from.to_s(:default)} ～　
+            td #{cypher.name}

@@ -28,18 +28,18 @@ class CyphersController < ApplicationController
 
   def create
     authenticate!
-    @community = Community.find(params[:id])
+    @community = Community.find(params[:community_id])
     if @current_user.hosting_community?(@community.id)
       params = cypher_params
-      community = Community.find(params[:id])
       @cypher = Cypher.new(name: params[:name],
                            place: params[:place],
-                           info: params[:ifno],
+                           info: params[:info],
                            cypher_from: params[:cypher_from],
-                           cypher_to: params[:cypher_to])
-      community.cyphers << @cypher
-      @cypher.host = @current_user
-      if @cypher.save!
+                           cypher_to: params[:cypher_to],
+                           community: @community,
+                           host: @current_user
+                          )
+      if @cypher.save
         redirect_to @cypher
       else
         render 'new'

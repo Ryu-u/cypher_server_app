@@ -1,12 +1,5 @@
-doctype html
-html
-  head
-    meta charset='utf-8'
-    title コミュニティ詳細
-  body
-    h1 フォローコミュニティ
-    table
-      - @communities.each do |community|
-        tr
-          td
-            = render partial: "communities/community_summary.html.slim", locals: {community: community}
+= provide :title, 'フォローコミュニティ'
+- @communities.each do |community|
+  tr
+    td
+      = render partial: "communities/community_summary.html.slim", locals: {community: community}

@@ -51,6 +51,9 @@ gem 'jquery-turbolinks'
 
 gem 'omniauth-twitter', :github => 'arunagw/omniauth-twitter'
 gem 'figaro'
+gem 'rails-i18n'
+
+gem 'rambulance'
 
 # TODO あとでmysql化
 #gem 'mysql2'
@@ -60,7 +63,7 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rspec-rails'
   gem 'factory_girl_rails'
-
+  gem 'simple_form'
   gem 'coffee-script-source', '1.8.0'
 
 end

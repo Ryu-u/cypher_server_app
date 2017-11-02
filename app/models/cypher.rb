@@ -1,5 +1,5 @@
 class Cypher < ApplicationRecord
-  # TODO beforeで同じ名前のサイファーのserial_numをインクリメント
+  before_validation :set_serial_num
   belongs_to :community
   belongs_to :host, class_name: 'User',
              foreign_key: 'host_id'
@@ -25,4 +25,9 @@ class Cypher < ApplicationRecord
   validates :cypher_to, presence: true
   validates :place, presence: true
   validates :host_id, presence: true
+
+  protected
+    def set_serial_num
+      self.serial_num = Cypher.where(name: self.name).maximum(:serial_num).to_i + 1
+    end
 end

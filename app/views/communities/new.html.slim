@@ -1,30 +1,25 @@
-doctype html
-html
-  head
-    meta charset='utf-8'
-    title コミュニティ作成
-  body
-    h1 コミュニティ作成
-    = form_for(@community) do |f|
-      table
-        tr
-          td
-            = f.label :name, 'コミュニティ名'
-            = f.text_field :name
-        tr
-          td
-            = f.label :home, 'ホーム'
-            = f.text_field :home
-        tr
-          td
-            = f.label :bio, '説明'
-            = f.text_area :bio
-        tr
-          td
-            = f.label :twitter_account, 'Twitterアカウント'
-            = f.text_field :twitter_account
-        tr
-          td
-            = f.label :thumbnail, 'サムネイル'
-            = f.text_field :thumbnail
-      = f.submit '作成'
+= provide :title, 'コミュニティ作成'
+= render partial: 'shared/error', locals: {target: @community}
+= form_for(@community) do |f|
+  table
+    tr
+      td
+        = f.label :name, 'コミュニティ名'
+        = f.text_field :name
+    tr
+      td
+        = f.label :home, 'ホーム'
+        = f.text_field :home
+    tr
+      td
+        = f.label :bio, '説明'
+        = f.text_area :bio
+    tr
+      td
+        = f.label :twitter_account, 'Twitterアカウント'
+        = f.text_field :twitter_account
+    tr
+      td
+        = f.label :thumbnail, 'サムネイル'
+        = f.text_field :thumbnail
+  = f.submit '作成'

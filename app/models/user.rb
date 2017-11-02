@@ -68,4 +68,13 @@ class User < ApplicationRecord
       return false
     end
   end
+
+  def already_participating_community?(community_id)
+    community = Community.find(community_id)
+    if !community.participants.find_by(id: self.id).blank?
+      true
+    else
+      false
+    end
+  end
 end

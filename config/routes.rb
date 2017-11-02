@@ -13,9 +13,10 @@ Rails.application.routes.draw do
             format: false,
             except: [:index]
 
-  resources :communities,
-            format: false,
-            except: [:index]
+  resources :communities, format: false, except: [:index] do
+    post '/participate_in' => 'communities#participate_in'
+    delete '/participate_in' => 'communities#leave'
+  end
 
   resources :cyphers,
             format: false
@@ -35,4 +36,5 @@ Rails.application.routes.draw do
   get '/hosting_cyphers' =>
           'cyphers#hosting_cyphers',
       format: false
+
 end

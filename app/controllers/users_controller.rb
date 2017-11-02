@@ -23,7 +23,7 @@ class UsersController < ApplicationController
     @user.twitter_account = session[:nickname]
     api_key = ApiKey.new(twitter_uid: session[:uid])
     @user.api_key = api_key
-    if @user.save!
+    if @user.save
       reset_session
       cookies.permanent[:access_token] = @user.api_key.access_token
 
@@ -47,7 +47,7 @@ class UsersController < ApplicationController
     @current_user.mc = true if params[:mc]
     @current_user.dj = true if params[:dj]
     @current_user.trackmaker = true if params[:trackmaker]
-    if @current_user.save!
+    if @current_user.save
       redirect_to @current_user
     else
       render 'edit'

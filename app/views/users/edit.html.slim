@@ -1,27 +1,23 @@
-doctype html
-html
-  head
-    meta charset='utf-8'
-    title ユーザー作成
-  body
-    = form_for(@current_user) do |f|
-      = f.label :name, 'ユーザー名'
-      br
-      = f.text_field :name
-      br
-      = f.label :home, '活動拠点'
-      br
-      = f.text_field :home
-      br
-      = f.label :bio, 'bio'
-      br
-      = f.text_area :bio
-      br
-      = f.label :MC, 'MC'
-      = f.check_box :mc, {class: 'mc'}, 1, 0
-      = f.label :DJ, 'DJ'
-      = f.check_box :dj, {class: 'dj'}, 1, 0
-      = f.label :TrackMaker, 'TrackMaker'
-      = f.check_box :trackmaker, {class: 'trackmaker'}, 1, 0
-      br
-      = f.submit '作成'
+= provide(:title, 'ユーザー編集')
+= render partial: 'shared/error', locals: {target: @user}
+= form_for(@current_user) do |f|
+  = f.label :name, 'ユーザー名'
+  br
+  = f.text_field :name
+  br
+  = f.label :home, '活動拠点'
+  br
+  = f.text_field :home
+  br
+  = f.label :bio, 'bio'
+  br
+  = f.text_area :bio
+  br
+  = f.label :MC, 'MC'
+  = f.check_box :mc, {class: 'mc'}, 1, 0
+  = f.label :DJ, 'DJ'
+  = f.check_box :dj, {class: 'dj'}, 1, 0
+  = f.label :TrackMaker, 'TrackMaker'
+  = f.check_box :trackmaker, {class: 'trackmaker'}, 1, 0
+  br
+  = f.submit '作成'
